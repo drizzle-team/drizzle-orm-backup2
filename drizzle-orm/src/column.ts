@@ -1,12 +1,12 @@
 import { PgInteger } from 'drizzle-orm-pg';
 
 import { ColumnBuilder } from './column-builder';
-import { Primitive } from './sql';
+import { ParamValue } from './sql';
 import { AnyTable } from './table';
 
 export abstract class Column<
 	TTableName extends string,
-	TType extends Primitive = Primitive,
+	TType extends ParamValue = ParamValue,
 	TNotNull extends boolean = boolean,
 	TDefault extends boolean = boolean,
 > {
