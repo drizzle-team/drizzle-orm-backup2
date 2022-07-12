@@ -9,8 +9,8 @@ export type RequiredKeyOnly<TKey, T extends AnyColumn> = T extends Column<
 	infer TDefault
 >
 	? TDefault extends false
-		? TKey
-		: never
+	? TKey
+	: never
 	: never;
 
 export type OptionalKeyOnly<TKey, T extends AnyColumn> = T extends Column<
@@ -20,29 +20,32 @@ export type OptionalKeyOnly<TKey, T extends AnyColumn> = T extends Column<
 	infer TDefault
 >
 	? [TDefault] extends [true]
-		? TKey
-		: never
+	? TKey
+	: never
 	: never;
+
+export type InferColumns<TTable extends AnyTable> =
+	TTable extends Table<any, infer TColumns> ? TColumns : never;
 
 export type InferType<
 	TTable extends AnyTable,
 	TInferMode extends 'select' | 'insert' = 'select',
-> = TTable extends Table<any, infer TColumns>
+	> = TTable extends Table<any, infer TColumns>
 	? TInferMode extends 'insert'
-		? {
-				[Key in keyof TColumns as RequiredKeyOnly<Key, TColumns[Key]>]: InferColumnType<
-					TColumns[Key],
-					'query'
-				>;
-		  } & {
-				[Key in keyof TColumns as OptionalKeyOnly<Key, TColumns[Key]>]?: InferColumnType<
-					TColumns[Key],
-					'query'
-				>;
-		  }
-		: {
-				[Key in keyof TColumns]: InferColumnType<TColumns[Key], 'query'>;
-		  }
+	? {
+		[Key in keyof TColumns as RequiredKeyOnly<Key, TColumns[Key]>]: InferColumnType<
+			TColumns[Key],
+			'query'
+		>;
+	} & {
+		[Key in keyof TColumns as OptionalKeyOnly<Key, TColumns[Key]>]?: InferColumnType<
+			TColumns[Key],
+			'query'
+		>;
+	}
+	: {
+		[Key in keyof TColumns]: InferColumnType<TColumns[Key], 'query'>;
+	}
 	: never;
 
 export interface UpdateConfig {
@@ -59,6 +62,9 @@ export interface SelectConfig<TTable extends AnyTable> {
 	fields: SelectFields<TableName<TTable>> | undefined;
 	where: SQL<TableName<TTable>>;
 	table: TTable;
+	limit: number | undefined;
+	offset: number | undefined;
+	distinct: AnyColumn | undefined;
 }
 
-export interface Return {}
+export interface Return { }
