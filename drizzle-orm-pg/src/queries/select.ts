@@ -2,12 +2,7 @@ import { AnyTable, InferColumnsTypes, InferType } from 'drizzle-orm';
 import { InferColumns, SelectConfig, SelectFields } from 'drizzle-orm/operations';
 import { SQL } from 'drizzle-orm/sql';
 import { TableName } from 'drizzle-orm/utils';
-import { QueryResult } from 'pg';
-import { PgColumn } from '~/columns/common';
-
-import { AnyPgDialect } from '~/connection';
-import { AnyPgSession } from '~/operations';
-import { AnyPgTable, PgTable } from '~/table';
+import { AnyPgDialect, AnyPgSession, AnyPgTable, PgColumn, PgTable } from '..';
 
 export interface PgSelectConfig<TTable extends string> extends SelectConfig<AnyPgTable> {}
 
