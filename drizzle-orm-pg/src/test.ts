@@ -3,7 +3,6 @@ import { InferType } from 'drizzle-orm/operations';
 import { and, or, eq, gt, max } from 'drizzle-orm/operators';
 
 import { int, serial, text } from './columns';
-import { BuildAlias, Increment, TableAlias } from './operations';
 import { PgTable, pgTable } from './table';
 
 // import { Pool } from 'pg';
@@ -93,10 +92,6 @@ async function main() {
 	// type g = NameWithAliasFromJoins<{ users: InferColumns<Table<{}, 'users'>> }, '1'>
 	// type f = Increment<'users', { users: 1 }>;
 	// const g: f['users'];
-
-	type test = {
-		[Alias in BuildAlias<PgTable<'cities', {}>, 2>]: TableAlias<PgTable<'cities', {}>, Alias>;
-	};
 
 	db.users
 		.select({ id: users.id, maxAge: sql`max(${users.age1})` })
