@@ -37,10 +37,12 @@ export abstract class Column<
 
 export type AnyColumn = Column<string>;
 
-export type InferColumnType<
-	TColumn extends AnyColumn,
-	TInferMode extends 'query' | 'raw',
-> = TColumn extends Column<any, infer TType, infer TNotNull, infer TDefault>
+export type InferColumnType<TColumn, TInferMode extends 'query' | 'raw'> = TColumn extends Column<
+	any,
+	infer TType,
+	infer TNotNull,
+	infer TDefault
+>
 	? TInferMode extends 'raw' // Raw mode
 		? TType // Just return the underlying type
 		: TNotNull extends true // Query mode

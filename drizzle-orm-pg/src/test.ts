@@ -88,6 +88,8 @@ async function main() {
 		)
 		.execute();
 
+	// const f = await db.users.update().set().where().returning().execute();
+
 	// type g = InferTableNameFromJoins<{ cities: InferColumns<Table<{}, 'users'>> }>
 	// type g = NameWithAliasFromJoins<{ users: InferColumns<Table<{}, 'users'>> }, '1'>
 	// type f = Increment<'users', { users: 1 }>;
@@ -96,31 +98,45 @@ async function main() {
 	db.users
 		.select({ id: users.id, maxAge: sql`max(${users.age1})` })
 		// .innerJoin(classes, (joins) => eq(joins.classes.id, joins.users.id))
-		.innerJoin(cities, (joins) => sql`${joins.cities1.id} = ${joins.cities1.id}`)
-		.innerJoin(cities, (joins) => sql`${joins.cities1.id} = ${joins.cities2.id}`)
-		.innerJoin(classes, (joins) => eq(joins.cities1.id, joins.cities2.id))
-		.innerJoin(classes, (joins) => sql`${joins.classes1.id} = ${joins.classes2.id}`)
-		.innerJoin(classes, (joins) => sql`${joins.users.class} = ${joins.classes3.id}`)
-		.innerJoin(users, (joins) => sql`${joins.users.class} = ${joins.users1.id}`)
-		.innerJoin(cities, (joins) => sql`${joins.cities1.id} = ${joins.classes1.id}`)
-		.innerJoin(users, (joins) => sql`${joins.users.class} = ${joins.users2.id}`)
+		.innerJoin(
+			cities,
+			(joins) => sql`${joins.users.id} = ${joins.cities1.id}`,
+			(cities) => ({
+				id: cities.id,
+			}),
+		)
+		// .innerJoin(cities, (joins) => sql`${joins.cities1.id} = ${joins.cities1.id}`)
+		// .innerJoin(classes, (joins) => eq(joins.cities1.id, joins.cities2.id))
+		// .innerJoin(classes, (joins) => sql`${joins.classes1.id} = ${joins.classes2.id}`)
+		// .innerJoin(classes, (joins) => sql`${joins.users.class} = ${joins.classes3.id}`)
+		// .innerJoin(users, (joins) => sql`${joins.users.class} = ${joins.users1.id}`)
+		// .innerJoin(cities, (joins) => sql`${joins.cities1.id} = ${joins.classes1.id}`)
+		// .innerJoin(users, (joins) => sql`${joins.users.class} = ${joins.users2.id}`)
 		// .innerJoin(cities, (joins) => sql`${joins.users.class} = ${joins.cities.id}`)
-		.where((joins) => sql`${joins.cities1.id} > 0`)
+		// .where((joins) => sql`${joins.users.age1} > 0`)
+		.where(sql`${users.age1} > 0`)
 		.execute();
 
 	const res = await db.users
-		.select()
-		.innerJoin(cities, (joins) => sql`${joins.cities1.id} = ${joins.cities1.id}`)
-		.where((joins) => and(gt(joins.users.age1, 18), sql`${joins.users.age1} is not null`))
+		.select({ id23: users.id })
+		// .where(sql`${users.age1} > 0`)
+		.innerJoin(
+			cities,
+			(joins) => sql`${joins.cities1.id} = ${joins.cities1.id}`,
+			(cities) => ({ id13: cities.name }),
+		)
+		.where(sql`${users.age1} > 0`)
 		.execute();
 
+	// const g = res[0]!.id23;
+
 	// res[0]
-	const g = res.map((it) => {
-		return {
-			city: it.cities1.id,
-			user: it.users.city,
-		};
-	});
+	// const g = res.map((it) => {
+	// 	return {
+	// 		city: it.cities1.id,
+	// 		user: it.users.city,
+	// 	};
+	// });
 
 	const selectWithJoinRes = [
 		{ user: { id2: 1 }, city: { idkf: 2 }, city1: { idk12f: 3 } },

@@ -1,4 +1,5 @@
 // import { Pool, QueryResult } from 'pg';
+import { Column, InferColumnType } from 'drizzle-orm';
 import { InferType, SelectFields } from 'drizzle-orm/operations';
 import { SQL, ParamValue } from 'drizzle-orm/sql';
 import { TableName } from 'drizzle-orm/utils';
@@ -7,6 +8,12 @@ import { PgColumn } from './columns';
 import { AnyPgDialect, PgSession } from './connection';
 import { PgInsert, PgSelect, PgUpdate } from './queries';
 import { AnyPgTable } from './table';
+
+export type PartialSelectResult<TSelectedFields extends SelectFields<string>> = {
+	[Key in keyof TSelectedFields]: TSelectedFields[Key] extends Column<string>
+		? InferColumnType<TSelectedFields[Key], 'query'>
+		: any;
+};
 
 export class PgTableOperations<TTable extends AnyPgTable = AnyPgTable> {
 	constructor(
@@ -19,14 +26,12 @@ export class PgTableOperations<TTable extends AnyPgTable = AnyPgTable> {
 		return rows;
 	}
 
-	select(): Omit<PgSelect<TTable>, 'where'> & { where: PgSelect<TTable>['whereWithSql'] };
+	select(): PgSelect<TTable, InferType<TTable>>;
 	select<TSelectedFields extends SelectFields<TableName<TTable>>>(
-		fields?: TSelectedFields,
-	): Omit<PgSelect<TTable, TSelectedFields>, 'where'> & {
-		where: PgSelect<TTable, TSelectedFields>['whereWithSql'];
-	};
-	select(fields?: any) {
-		return new PgSelect<TTable>(this.table, fields, this.session, this.map, this.dialect);
+		fields: TSelectedFields,
+	): PgSelect<TTable, PartialSelectResult<TSelectedFields>>;
+	select(fields?: any): PgSelect<TTable, any> {
+		return new PgSelect(this.table, fields, this.session, this.map, this.dialect);
 	}
 
 	update(): Pick<PgUpdate<TTable>, 'set'> {
