@@ -189,6 +189,10 @@ async function main() {
 		.where(sql`${users.id} = 2`)
 		.returning()
 		.execute();
+
+	db.users.delete().returning().execute();
+
+	db.users.delete().execute();
 }
 
 main().catch((e) => {

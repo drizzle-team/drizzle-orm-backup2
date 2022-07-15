@@ -80,7 +80,7 @@ export class PgDialect<TDBSchema extends Record<string, AnyPgTable>>
 		where,
 		returning,
 	}: PgDeleteConfig<TTable>): SQL<TableName<TTable>> {
-		return sql<TableName<TTable>>`delete ${table} ${sql`where ${where}`} ${
+		return sql<TableName<TTable>>`delete from ${table} ${sql`where ${where}`} ${
 			returning ? sql`returning *` : undefined
 		}`;
 	}

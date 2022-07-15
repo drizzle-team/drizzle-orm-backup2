@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 importers:
 
@@ -83,7 +83,7 @@ importers:
       ts-node: ^10.8.2
       typescript: ^4.7.4
     devDependencies:
-      drizzle-orm: file:drizzle-orm/package.tgz_a66b2925408f26e7eb54ae857393a119
+      drizzle-orm: file:drizzle-orm/package.tgz_uzvssjkar4top22uv2cxhe5bde
       drizzle-orm-mysql: file:drizzle-orm-mysql/package.tgz_drizzle-orm@0.13.0
       drizzle-orm-pg: file:drizzle-orm-pg/package.tgz_drizzle-orm@0.13.0
       ts-node: 10.8.2_typescript@4.7.4
@@ -624,6 +624,8 @@ packages:
       ssri: 8.0.1
       tar: 6.1.11
       unique-filename: 1.1.1
+    transitivePeerDependencies:
+      - bluebird
     dev: true
     optional: true
 
@@ -1080,6 +1082,7 @@ packages:
       socks-proxy-agent: 6.2.1
       ssri: 8.0.1
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
     optional: true
@@ -1237,6 +1240,7 @@ packages:
       tar: 6.1.11
       which: 2.0.2
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
     optional: true
@@ -1396,6 +1400,11 @@ packages:
 
   /promise-inflight/1.0.1:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
     dev: true
     optional: true
 
@@ -1555,6 +1564,7 @@ packages:
     optionalDependencies:
       node-gyp: 8.4.1
     transitivePeerDependencies:
+      - bluebird
       - encoding
       - supports-color
     dev: true
@@ -1811,11 +1821,11 @@ packages:
       mysql2:
         optional: true
     dependencies:
-      drizzle-orm: file:drizzle-orm/package.tgz_a66b2925408f26e7eb54ae857393a119
+      drizzle-orm: file:drizzle-orm/package.tgz_uzvssjkar4top22uv2cxhe5bde
     dev: true
 
   file:drizzle-orm-pg/package.tgz_drizzle-orm@0.13.0:
-    resolution: {integrity: sha512-c/tLcVj3Y9Lm6kR+W/9Jr0FRGEpI75fMzY4P3qZR0Q6k4NXuxzXvmW1o+vsFORNO/xsD5gzjR0rRJKasFn7K3A==, tarball: file:drizzle-orm-pg/package.tgz}
+    resolution: {integrity: sha512-tEtJmm8P1TQxj9v3GRO6Pms4cgk7WIv1jo0AGCdSCXjwAsUjFTgvdPRQ7d9Hx+YC2JNNuWfr37itYCPkxfPI3w==, tarball: file:drizzle-orm-pg/package.tgz}
     id: file:drizzle-orm-pg/package.tgz
     name: drizzle-orm-pg
     version: 0.13.0
@@ -1828,11 +1838,11 @@ packages:
       pg:
         optional: true
     dependencies:
-      drizzle-orm: file:drizzle-orm/package.tgz_a66b2925408f26e7eb54ae857393a119
+      drizzle-orm: file:drizzle-orm/package.tgz_uzvssjkar4top22uv2cxhe5bde
     dev: true
 
-  file:drizzle-orm/package.tgz_a66b2925408f26e7eb54ae857393a119:
-    resolution: {integrity: sha512-HFEBiB/CAimqadPB4TboXV3Fhd71I97MhKxpZAWXlsFuVUl5kaWJE536O5hrucFNTlmkJ1efsRYDAHkVdIxrCg==, tarball: file:drizzle-orm/package.tgz}
+  file:drizzle-orm/package.tgz_uzvssjkar4top22uv2cxhe5bde:
+    resolution: {integrity: sha512-De9FxxUqARSVFrXax4YCybrSR9lGZLswx6rQPatbBvpWSbVbfxKBl31v5NGvNdJYAfZzbdY5agiqZUl0Aqjv2A==, tarball: file:drizzle-orm/package.tgz}
     id: file:drizzle-orm/package.tgz
     name: drizzle-orm
     version: 0.13.0
