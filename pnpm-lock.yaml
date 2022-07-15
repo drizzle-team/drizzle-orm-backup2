@@ -1,4 +1,4 @@
-lockfileVersion: 5.4
+lockfileVersion: 5.3
 
 importers:
 
@@ -31,7 +31,7 @@ importers:
       pg: 8.7.3
       resolve-tspaths: 0.7.0_typescript@4.8.0-beta
       sqlite3: 5.0.8
-      ts-node: 10.8.2_fsja7lcmn6fznx4yuaiztfr5su
+      ts-node: 10.8.2_typescript@4.8.0-beta
       typescript: 4.8.0-beta
       uvu: 0.5.6
 
@@ -49,7 +49,7 @@ importers:
       drizzle-orm: link:../drizzle-orm/src
       mysql2: 2.3.3
       resolve-tspaths: 0.7.0_typescript@4.8.0-beta
-      ts-node: 10.8.2_fsja7lcmn6fznx4yuaiztfr5su
+      ts-node: 10.8.2_typescript@4.8.0-beta
       typescript: 4.8.0-beta
       uvu: 0.5.6
 
@@ -70,7 +70,7 @@ importers:
       drizzle-orm: link:../drizzle-orm/src
       pg: 8.7.3
       resolve-tspaths: 0.7.0_typescript@4.8.0-beta
-      ts-node: 10.8.2_fsja7lcmn6fznx4yuaiztfr5su
+      ts-node: 10.8.2_typescript@4.8.0-beta
       type-fest: 2.16.0
       typescript: 4.8.0-beta
       uvu: 0.5.6
@@ -624,8 +624,6 @@ packages:
       ssri: 8.0.1
       tar: 6.1.11
       unique-filename: 1.1.1
-    transitivePeerDependencies:
-      - bluebird
     dev: true
     optional: true
 
@@ -1082,7 +1080,6 @@ packages:
       socks-proxy-agent: 6.2.1
       ssri: 8.0.1
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
     optional: true
@@ -1240,7 +1237,6 @@ packages:
       tar: 6.1.11
       which: 2.0.2
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
     optional: true
@@ -1400,11 +1396,6 @@ packages:
 
   /promise-inflight/1.0.1:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
     dev: true
     optional: true
 
@@ -1564,7 +1555,6 @@ packages:
     optionalDependencies:
       node-gyp: 8.4.1
     transitivePeerDependencies:
-      - bluebird
       - encoding
       - supports-color
     dev: true
@@ -1670,7 +1660,7 @@ packages:
       yn: 3.1.1
     dev: true
 
-  /ts-node/10.8.2_fsja7lcmn6fznx4yuaiztfr5su:
+  /ts-node/10.8.2_typescript@4.8.0-beta:
     resolution: {integrity: sha512-LYdGnoGddf1D6v8REPtIH+5iq/gTDuZqv2/UJUU7tKjuEU8xVZorBM+buCGNjj+pGEud+sOoM4CX3/YzINpENA==}
     hasBin: true
     peerDependencies:
@@ -1689,7 +1679,6 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
-      '@types/node': 18.0.4
       acorn: 8.7.1
       acorn-walk: 8.2.0
       arg: 4.1.3

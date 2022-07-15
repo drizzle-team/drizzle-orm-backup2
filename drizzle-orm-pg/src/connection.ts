@@ -4,7 +4,7 @@ import { TableName } from 'drizzle-orm/utils';
 
 import { AnyPgColumn } from './columns';
 import { PgTableOperations } from './operations';
-import { PgUpdateConfig, AnyPgSelectConfig, AnyPgInsertConfig } from './queries';
+import { PgUpdateConfig, AnyPgSelectConfig, AnyPgInsertConfig, PgDeleteConfig } from './queries';
 import { AnyPgTable } from './table';
 import { getTableColumns } from './utils';
 
@@ -73,6 +73,16 @@ export class PgDialect<TDBSchema extends Record<string, AnyPgTable>>
 
 	public escapeParam(num: number): string {
 		return `$${num}`;
+	}
+
+	public buildDeleteQuery<TTable extends AnyPgTable>({
+		table,
+		where,
+		returning,
+	}: PgDeleteConfig<TTable>): SQL<TableName<TTable>> {
+		return sql<TableName<TTable>>`delete ${table} ${sql`where ${where}`} ${
+			returning ? sql`returning *` : undefined
+		}`;
 	}
 
 	public buildUpdateQuery<TTable extends AnyPgTable>({
