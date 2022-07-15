@@ -177,18 +177,18 @@ async function main() {
 		.returning()
 		.execute();
 
-	// db.users.delete().where(eq(users.id, 2)).returning().execute();
-	// db.users
-	// 	.delete()
-	// 	.where(sql`${users.id} = ${2}`)
-	// 	.returning()
-	// 	.execute();
-	// // 2 won't be in prepared statement params
-	// db.users
-	// 	.delete()
-	// 	.where(sql`${users.id} = 2`)
-	// 	.returning()
-	// 	.execute();
+	db.users.delete().where(eq(users.id, 2)).returning().execute();
+	db.users
+		.delete()
+		.where(sql`${users.id} = ${2}`)
+		.returning()
+		.execute();
+	// 2 won't be in prepared statement params
+	db.users
+		.delete()
+		.where(sql`${users.id} = 2`)
+		.returning()
+		.execute();
 }
 
 main().catch((e) => {

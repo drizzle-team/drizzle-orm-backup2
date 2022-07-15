@@ -83,10 +83,10 @@ importers:
       ts-node: ^10.8.2
       typescript: ^4.7.4
     devDependencies:
-      drizzle-orm: file:drizzle-orm/package.tgz_uzvssjkar4top22uv2cxhe5bde
+      drizzle-orm: file:drizzle-orm/package.tgz_a66b2925408f26e7eb54ae857393a119
       drizzle-orm-mysql: file:drizzle-orm-mysql/package.tgz_drizzle-orm@0.13.0
       drizzle-orm-pg: file:drizzle-orm-pg/package.tgz_drizzle-orm@0.13.0
-      ts-node: 10.8.2_2zqz24ol5yhbv2blv4fh7akzrq
+      ts-node: 10.8.2_typescript@4.7.4
       typescript: 4.7.4
 
 packages:
@@ -1629,7 +1629,7 @@ packages:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
     dev: true
 
-  /ts-node/10.8.2_2zqz24ol5yhbv2blv4fh7akzrq:
+  /ts-node/10.8.2_typescript@4.7.4:
     resolution: {integrity: sha512-LYdGnoGddf1D6v8REPtIH+5iq/gTDuZqv2/UJUU7tKjuEU8xVZorBM+buCGNjj+pGEud+sOoM4CX3/YzINpENA==}
     hasBin: true
     peerDependencies:
@@ -1648,7 +1648,6 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
-      '@types/node': 18.0.4
       acorn: 8.7.1
       acorn-walk: 8.2.0
       arg: 4.1.3
@@ -1799,7 +1798,7 @@ packages:
     dev: true
 
   file:drizzle-orm-mysql/package.tgz_drizzle-orm@0.13.0:
-    resolution: {integrity: sha512-dfU8a0BGxzSvSUaZ5jrxO/h3SLHT6JsyLuoi42dJBF4iwGVVXDu27v1UB1vbU/wc8Pqp7Xt6n2ZpewqBgL7Zuw==, tarball: file:drizzle-orm-mysql/package.tgz}
+    resolution: {integrity: sha512-WxyZrjYlVtfyhsDqIkiUzhndDEmrxZpSOObRFh3fDO06pXdjJ8nPsE2ziRzFkXVocLKxLNTSGO4LTlrXX4tzDw==, tarball: file:drizzle-orm-mysql/package.tgz}
     id: file:drizzle-orm-mysql/package.tgz
     name: drizzle-orm-mysql
     version: 0.13.0
@@ -1812,11 +1811,11 @@ packages:
       mysql2:
         optional: true
     dependencies:
-      drizzle-orm: file:drizzle-orm/package.tgz_uzvssjkar4top22uv2cxhe5bde
+      drizzle-orm: file:drizzle-orm/package.tgz_a66b2925408f26e7eb54ae857393a119
     dev: true
 
   file:drizzle-orm-pg/package.tgz_drizzle-orm@0.13.0:
-    resolution: {integrity: sha512-FsaqFHVAoibnKb5IaqslAZIO9fYAXGCLzbJl3UeoGQIxwQ0hSKw+mHCCmBq9CLyjy0T7jvwIj9Im4x1hWbavgg==, tarball: file:drizzle-orm-pg/package.tgz}
+    resolution: {integrity: sha512-c/tLcVj3Y9Lm6kR+W/9Jr0FRGEpI75fMzY4P3qZR0Q6k4NXuxzXvmW1o+vsFORNO/xsD5gzjR0rRJKasFn7K3A==, tarball: file:drizzle-orm-pg/package.tgz}
     id: file:drizzle-orm-pg/package.tgz
     name: drizzle-orm-pg
     version: 0.13.0
@@ -1829,11 +1828,11 @@ packages:
       pg:
         optional: true
     dependencies:
-      drizzle-orm: file:drizzle-orm/package.tgz_uzvssjkar4top22uv2cxhe5bde
+      drizzle-orm: file:drizzle-orm/package.tgz_a66b2925408f26e7eb54ae857393a119
     dev: true
 
-  file:drizzle-orm/package.tgz_uzvssjkar4top22uv2cxhe5bde:
-    resolution: {integrity: sha512-SUKrp+b4BW9uHADviBj0z9lyN1CkiTsbASiAH/2pau0G0M+vHT2rxvT7J1Xh3XWaSMSwWjYR7hCkIkq3HUa9Gg==, tarball: file:drizzle-orm/package.tgz}
+  file:drizzle-orm/package.tgz_a66b2925408f26e7eb54ae857393a119:
+    resolution: {integrity: sha512-HFEBiB/CAimqadPB4TboXV3Fhd71I97MhKxpZAWXlsFuVUl5kaWJE536O5hrucFNTlmkJ1efsRYDAHkVdIxrCg==, tarball: file:drizzle-orm/package.tgz}
     id: file:drizzle-orm/package.tgz
     name: drizzle-orm
     version: 0.13.0
