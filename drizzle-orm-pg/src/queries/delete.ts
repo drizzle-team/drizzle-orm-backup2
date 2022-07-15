@@ -7,7 +7,7 @@ import { AnyPgTable, InferType } from '~/table';
 
 export interface PgDeleteConfig<TTable extends AnyPgTable> {
 	where: SQL<TableName<TTable>>;
-	table: TableName<TTable>;
+	table: TTable;
 	returning?: boolean;
 }
 
@@ -20,7 +20,7 @@ export class PgDelete<TTable extends AnyPgTable, TReturn = QueryResult<any>> {
 		private mapper: (rows: any[]) => InferType<TTable>[],
 		private dialect: AnyPgDialect,
 	) {
-		this.fields.table = table[tableName] as TableName<TTable>;
+		this.fields.table = table;
 	}
 
 	public where(where: SQL<TableName<TTable>>): Pick<this, 'returning' | 'execute'> {
