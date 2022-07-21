@@ -1,7 +1,9 @@
+import { table } from 'console';
 import { connect, sql } from 'drizzle-orm';
 import { constraint, foreignKey, index, InferModel, PgConnector, pgTable } from 'drizzle-orm-pg';
 import { int, serial, text } from 'drizzle-orm-pg/columns';
 import { PgTestConnector } from 'drizzle-orm-pg/testing';
+import { getTableColumns } from 'drizzle-orm-pg/utils';
 import { and, asc, desc, eq, max, or, plus } from 'drizzle-orm/expressions';
 import { Pool } from 'pg';
 
@@ -66,7 +68,14 @@ async function main() {
 	});
 	const client = await pool.connect();
 	// const realDb = await connect(new PgConnector(client, { users, cities }));
-	const db = await connect(new PgTestConnector({ users, cities }));
+
+	const db = await connect(new PgTestConnector(client, { users, cities }));
+	// drizzle.migrate(db, './')
+
+	// const pgConnector = new PgTestConnector(client);
+	// drizzle.migrate(pgConnector, './');
+
+	table[tableUn];
 
 	// const selectResult = await realDb.users
 	// 	.select({
@@ -95,13 +104,16 @@ async function main() {
 		age1: 1,
 	};
 
-	const insertResult = await db.users.insert(newUser).returning({
-		id: users.id,
-		id2: users.id,
-		serial1: users.serial1,
-		serial2: users.serial2,
-		lowerClass: sql.response<string>(users.class)`lower(${users.class})`,
-	}).execute();
+	const insertResult = await db.users
+		.insert(newUser)
+		.returning({
+			id: users.id,
+			id2: users.id,
+			serial1: users.serial1,
+			serial2: users.serial2,
+			lowerClass: sql.response<string>(users.class)`lower(${users.class})`,
+		})
+		.execute();
 
 	const result1 = await db.users.insert(newUser).execute();
 
