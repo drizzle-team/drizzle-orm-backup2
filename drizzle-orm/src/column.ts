@@ -20,6 +20,14 @@ export abstract class Column<
 	};
 
 	readonly name: string;
+	readonly primary: boolean;
+	readonly references: (() => Column<
+		TableName,
+		TData,
+		ColumnDriverParam,
+		ColumnNotNull,
+		ColumnHasDefault
+	>)[];
 	readonly notNull: TNotNull;
 	readonly default: TData | undefined;
 
@@ -30,6 +38,8 @@ export abstract class Column<
 		this.name = builder.name;
 		this.notNull = builder._notNull;
 		this.default = builder._default;
+		this.primary = builder._primaryKey;
+		this.references = builder._references;
 	}
 
 	abstract getSQLType(): string;

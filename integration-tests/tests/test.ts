@@ -1,27 +1,29 @@
 import { table } from 'console';
 import { connect, sql } from 'drizzle-orm';
 import { constraint, foreignKey, index, InferModel, PgConnector, pgTable } from 'drizzle-orm-pg';
-import { int, serial, text } from 'drizzle-orm-pg/columns';
+import { integer, interval, serial, text, timestamp } from 'drizzle-orm-pg/columns';
 import { PgTestConnector } from 'drizzle-orm-pg/testing';
 import { getTableColumns } from 'drizzle-orm-pg/utils';
 import { and, asc, desc, eq, max, or, plus } from 'drizzle-orm/expressions';
 import { Pool } from 'pg';
 
 export const users = pgTable(
-	'users',
+	'users2',
 	{
 		id: serial('id').primaryKey(),
 		name: text('name').notNull(),
 		name1: text('name').notNull(),
-		homeCity: int('home_city')
+		homeCity: integer('home_city')
 			.notNull()
 			.references(() => cities.id),
-		currentCity: int('current_city').references(() => cities.id),
+		currentCity: integer('current_city').references(() => cities.id),
 		serial1: serial('serial1'),
 		serial2: serial('serial2').notNull(),
 		class: text<'A' | 'C'>('class').notNull(),
 		subClass: text<'B' | 'D'>('sub_class'),
-		age1: int('age1').notNull(),
+		age1: integer('age1').notNull(),
+		createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+		interval1: interval('interval1', { fields: 'day to second', precision: 3 }),
 	},
 	(users) => ({
 		usersAge1Idx: index('usersAge1Idx', users.class, { unique: true }),
@@ -49,7 +51,7 @@ type InsertUser = InferModel<typeof users, 'insert'>;
 const cities = pgTable('cities', {
 	id: serial('id').primaryKey(),
 	name: text('name').notNull(),
-	population: int('population').default(0),
+	population: integer('population').default(0),
 });
 
 const classes = pgTable('classes', {
@@ -70,12 +72,12 @@ async function main() {
 	// const realDb = await connect(new PgConnector(client, { users, cities }));
 
 	const db = await connect(new PgTestConnector(client, { users, cities }));
-	// drizzle.migrate(db, './')
+	// drizzle.migrate(db, './');
 
 	// const pgConnector = new PgTestConnector(client);
 	// drizzle.migrate(pgConnector, './');
 
-	table[tableUn];
+	// const db = await connect(new PgTestConnector({ users, cities, classes }));
 
 	// const selectResult = await realDb.users
 	// 	.select({
@@ -212,9 +214,10 @@ async function main() {
 		// .where((joins) => sql`${joins.users.age1} > 0`)
 		// .where(eq(users.age1, 1))
 		// .where((joins) => eqjoins.users.age1, 1))
-		// .orderBy(asc(users.id), desc(users.name))
-		// .orderBy((joins)=> [asc(joins.users.id), desc(joins.cities1.id)])
-		// .orderBy((joins)=> sql`${joins.users.age1} ASC`)
+		.orderBy(asc(users.id), desc(users.name))
+		// .orderBy((joins) => [asc(users.id), desc(joins.cities1.id)])
+		// .orderBy((joins) => sql`${users.age1} ASC`)
+		// .orderBy(sql`${users.age1} ASC`)
 		.execute();
 
 	const megaJoin = await db.users
