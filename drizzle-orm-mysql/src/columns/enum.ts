@@ -1,5 +1,6 @@
 import { AnyTable } from 'drizzle-orm';
 import { ColumnData, ColumnDriverParam, ColumnHasDefault, ColumnNotNull, TableName } from 'drizzle-orm/branded-types';
+import { AnyMySqlTable } from '~/table';
 import { MySqlColumnBuilder, MySqlColumnWithMapper } from './common';
 
 export class MySqlEnumBuilder<
@@ -15,7 +16,7 @@ export class MySqlEnumBuilder<
 	}
 	/** @internal */
 	override build<TTableName extends TableName>(
-		table: AnyTable<TTableName>,
+		table: AnyMySqlTable<TTableName>,
 	): MySqlEnumColumn<TTableName, TData, TNotNull, THasDefault> {
 		return new MySqlEnumColumn(table, this, this.values);
 	}
@@ -32,7 +33,7 @@ export class MySqlEnumColumn<
 	values: string[];
 
 	constructor(
-		table: AnyTable<TTableName>,
+		table: AnyMySqlTable<TTableName>,
 		builder: MySqlEnumBuilder<TData, TNotNull, THasDefault>,
 		values: string[],
 	) {

@@ -40,7 +40,7 @@ export class MySqlFloat<
 	precision: number | undefined;
 	scale: number | undefined;
 
-	constructor(table: AnyTable<TTableName>, builder: MySqlFloatBuilder<TNotNull, THasDefault>) {
+	constructor(table: AnyMySqlTable<TTableName>, builder: MySqlFloatBuilder<TNotNull, THasDefault>) {
 		super(table, builder);
 		this.precision = builder.precision;
 		this.scale = builder.scale;

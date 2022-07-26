@@ -40,7 +40,7 @@ export class MySqlReal<
 	precision: number | undefined;
 	scale: number | undefined;
 
-	constructor(table: AnyTable<TTableName>, builder: MySqlRealBuilder<TNotNull, THasDefault>) {
+	constructor(table: AnyMySqlTable<TTableName>, builder: MySqlRealBuilder<TNotNull, THasDefault>) {
 		super(table, builder);
 		this.precision = builder.precision;
 		this.scale = builder.scale;

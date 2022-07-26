@@ -1,8 +1,8 @@
 import { GetColumnData } from 'drizzle-orm';
-import { TableName, Unwrap } from 'drizzle-orm/branded-types';
-import { SelectFields } from 'drizzle-orm/operations';
+import { ColumnData, TableName, Unwrap } from 'drizzle-orm/branded-types';
+import { SelectFieldsOrdered } from 'drizzle-orm/operations';
 import { AnySQLResponse, SQLResponse } from 'drizzle-orm/sql';
-import { GetTableName, tableColumns } from 'drizzle-orm/utils';
+import { GetTableName, tableColumns, tableName } from 'drizzle-orm/utils';
 import { Simplify } from 'type-fest';
 import { MySqlColumnDriverParam } from './branded-types';
 import { AnyMySqlColumn } from './columns/common';
@@ -10,12 +10,21 @@ import { AnyMySqlDialect, MySqlSession } from './connection';
 import { MySqlDelete, MySqlInsert, MySqlSelect, MySqlUpdate } from './queries';
 import { AnyMySqlTable, InferModel } from './table';
 
-export type MySqlSelectFields<TTableName extends TableName> = SelectFields<TTableName, MySqlColumnDriverParam>;
+export type MySqlSelectFields<
+	TTableName extends TableName,
+	TColumnDriverParam extends MySqlColumnDriverParam = MySqlColumnDriverParam,
+> = {
+	[key: string]:
+		| SQLResponse<TTableName, ColumnData>
+		| AnyMySqlColumn<TTableName, any, TColumnDriverParam>;
+};
 
-export type MySqlSelectFieldsOrdered<TTableName extends TableName = TableName> = {
-	name: string;
-	column: AnyMySqlColumn<TTableName> | AnySQLResponse<TTableName>;
-}[];
+export type MySqlSelectFieldsOrdered<TTableName extends TableName = TableName> = (
+	& Omit<SelectFieldsOrdered[number], 'column'>
+	& {
+		column: AnyMySqlColumn<TTableName> | AnySQLResponse<TTableName>;
+	}
+)[];
 
 export type SelectResultFields<
 	TTableName extends TableName,
@@ -34,6 +43,7 @@ export class MySqlTableOperations<TTable extends AnyMySqlTable, TTableNamesMap e
 		protected table: TTable,
 		private session: MySqlSession,
 		private dialect: AnyMySqlDialect,
+		private tableNamesMap: TTableNamesMap,
 	) {}
 
 	select(): MySqlSelect<TTable, TTableNamesMap, InferModel<TTable>>;
@@ -42,9 +52,10 @@ export class MySqlTableOperations<TTable extends AnyMySqlTable, TTableNamesMap e
 	): MySqlSelect<TTable, TTableNamesMap, SelectResultFields<GetTableName<TTable>, TSelectedFields>>;
 	select(fields?: MySqlSelectFields<GetTableName<TTable>>): MySqlSelect<TTable, TTableNamesMap, any> {
 		const fieldsOrdered = this.dialect.orderSelectedFields(
-			fields ?? this.table[tableColumns] as MySqlSelectFields<GetTableName<TTable>>,
+			fields ?? this.table[tableColumns] as Record<string, AnyMySqlColumn>,
+			this.tableNamesMap[this.table[tableName]]!,
 		);
-		return new MySqlSelect(this.table, fieldsOrdered, this.session, this.dialect);
+		return new MySqlSelect(this.table, fieldsOrdered, this.session, this.dialect, this.tableNamesMap);
 	}
 
 	update(): Pick<MySqlUpdate<TTable>, 'set'> {

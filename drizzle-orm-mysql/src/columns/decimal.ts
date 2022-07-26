@@ -40,7 +40,7 @@ export class MySqlDecimal<
 	precision: number | undefined;
 	scale: number | undefined;
 
-	constructor(table: AnyTable<TTableName>, builder: MySqlDecimalBuilder<TNotNull, THasDefault>) {
+	constructor(table: AnyMySqlTable<TTableName>, builder: MySqlDecimalBuilder<TNotNull, THasDefault>) {
 		super(table, builder);
 		this.precision = builder.precision;
 		this.scale = builder.scale;

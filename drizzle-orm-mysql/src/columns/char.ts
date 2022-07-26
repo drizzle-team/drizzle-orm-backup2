@@ -37,7 +37,7 @@ export class MySqlChar<
 
 	length: number | undefined;
 
-	constructor(table: AnyTable<TTableName>, builder: MySqlCharBuilder<TNotNull, THasDefault>) {
+	constructor(table: AnyMySqlTable<TTableName>, builder: MySqlCharBuilder<TNotNull, THasDefault>) {
 		super(table, builder);
 		this.length = builder.length;
 	}

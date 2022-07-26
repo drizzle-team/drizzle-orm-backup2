@@ -37,7 +37,7 @@ export class MySqlBinary<
 
 	length: number | undefined;
 
-	constructor(table: AnyTable<TTableName>, builder: MySqlBinaryBuilder<TNotNull, THasDefault>) {
+	constructor(table: AnyMySqlTable<TTableName>, builder: MySqlBinaryBuilder<TNotNull, THasDefault>) {
 		super(table, builder);
 		this.length = builder.length;
 	}

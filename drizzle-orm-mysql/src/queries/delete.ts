@@ -1,4 +1,4 @@
-import { GetTableName, tableColumns, tableRowMapper } from 'drizzle-orm/utils';
+import { GetTableName, tableColumns, tableName, tableRowMapper } from 'drizzle-orm/utils';
 import { AnyMySqlDialect, MySqlQueryResult, MySqlSession } from '~/connection';
 import { MySqlSelectFields, MySqlSelectFieldsOrdered, SelectResultFields } from '~/operations';
 import { AnyMySQL, MySqlPreparedQuery } from '~/sql';
@@ -31,7 +31,10 @@ export class MySqlDelete<TTable extends AnyMySqlTable, TReturn = MySqlQueryResul
 		fields: TSelectedFields,
 	): Pick<MySqlDelete<TTable, SelectResultFields<GetTableName<TTable>, TSelectedFields>[]>, 'getQuery' | 'execute'>;
 	public returning(fields?: MySqlSelectFields<GetTableName<TTable>>): MySqlDelete<TTable, any> {
-		const orderedFields = this.dialect.orderSelectedFields(fields ?? this.table[tableColumns]);
+		const orderedFields = this.dialect.orderSelectedFields(
+			fields ?? this.table[tableColumns],
+			this.table[tableName],
+		);
 		this.config.returning = orderedFields;
 		return this;
 	}

@@ -14,15 +14,16 @@ export interface JoinsValue {
 	on: AnyMySQL;
 	table: AnyMySqlTable;
 	joinType: JoinType;
-	alias: AnyMySqlTable;
+	aliasTable: AnyMySqlTable;
 }
 
 export type SelectResult<
 	TTable extends AnyMySqlTable,
 	TReturn,
 	TInitialSelectResultFields extends Record<string, unknown>,
+	TTableNamesMap extends Record<string, string>,
 > = TReturn extends undefined ? TInitialSelectResultFields[]
-	: Simplify<TReturn & { [k in Unwrap<GetTableName<TTable>>]: TInitialSelectResultFields }>[];
+	: Simplify<TReturn & { [Key in TTableNamesMap[Unwrap<GetTableName<TTable>>]]: TInitialSelectResultFields }>[];
 
 export type AnyMySqlSelect = MySqlSelect<AnyMySqlTable, any, any, any, any>;
 
@@ -44,7 +45,7 @@ export type BuildAliasName<
 	TTable extends AnyMySqlTable,
 	TTableNamesMap extends Record<string, string>,
 	TAlias extends { [name: string]: number },
-> = `${TTableNamesMap[Unwrap<GetTableName<TTable>>]}${GetAliasIndex<GetTableName<TTable>, TAlias>}`;
+> = `${TTableNamesMap[Unwrap<GetTableName<TTable>>]}${GetAliasSuffix<GetTableName<TTable>, TAlias>}`;
 
 export type BuildAliasTable<TTable extends AnyMySqlTable, TAlias extends TableName> = MapColumnsToTableAlias<
 	GetTableColumns<TTable>,
@@ -55,51 +56,51 @@ export type MapColumnsToTableAlias<TColumns extends Record<string, AnyMySqlColum
 	[Key in keyof TColumns]: ChangeColumnTable<TColumns[Key], TAlias>;
 };
 
-type Increment<
-	TNumber extends number,
-	TCounter extends any[] = [],
-> = TCounter['length'] extends TNumber ? [...TCounter, 0]['length']
-	: Increment<TNumber, [...TCounter, 0]>;
-
-export type IncrementAlias<
-	TTable extends AnyMySqlTable,
-	TAlias extends { [name: string]: number },
-	TTableName extends string = Unwrap<GetTableName<TTable>>,
-> = TAlias extends { [key in TTableName]: infer N } ? N extends number ? Simplify<
-			& Omit<TAlias, TTableName>
-			& {
-				[K in TTableName]: Increment<N>;
-			}
-		>
-	: never
-	: Omit<TAlias, TTableName> & { [Key in TTableName]: 2 };
-
-export type GetAliasIndex<
+export type GetAliasSuffix<
 	TTableName extends TableName,
 	TAlias extends { [name: string]: number },
-> = TAlias extends { [name in Unwrap<TTableName>]: infer N } ? (N extends number ? N : never) : 1;
+> = TAlias extends { [name in Unwrap<TTableName>]: infer N } ? (N extends number ? `_${N}` : never) : '';
 
-export type AppendToReturn<
+export type AppendToResult<
 	TReturn,
-	TAlias extends TableName,
+	TAlias extends string,
 	TSelectedFields extends MySqlSelectFields<TableName>,
-> = TReturn extends undefined ? { [Key in Unwrap<TAlias>]: SelectResultFields<TableName, TSelectedFields> }
-	: Simplify<TReturn & { [Key in Unwrap<TAlias>]: SelectResultFields<TableName, TSelectedFields> }>;
+> = TReturn extends undefined ? { [Key in TAlias]: SelectResultFields<TableName, TSelectedFields> }
+	: Simplify<TReturn & { [Key in TAlias]: SelectResultFields<TableName, TSelectedFields> }>;
 
-export type AppendToJoins<
+export type AppendToAliases<
 	TJoins extends { [k: string]: AnyMySqlTable | Record<string, AnyColumn> },
 	TJoinedTable extends AnyMySqlTable,
-	TAlias extends { [name: string]: number },
-	TTableNamesMap extends Record<string, string>,
+	TJoinName extends string,
+	TAliasName extends string = TJoinName,
 > = Simplify<
 	& TJoins
 	& {
-		[Alias in BuildAliasName<TJoinedTable, TTableNamesMap, TAlias>]: BuildAliasTable<
+		[Alias in TJoinName]: BuildAliasTable<
 			TJoinedTable,
-			TableName<Alias>
+			TableName<TAliasName>
 		>;
 	},
 	{
 		deep: true;
 	}
 >;
+
+export type JoinOn<
+	TTableNamesMap extends Record<string, string>,
+	TJoinedTableNames extends string,
+	TAliases extends { [tableName: string]: any },
+	TJoinedTable extends AnyMySqlTable<TableName<keyof TTableNamesMap & string>>,
+	TJoinName extends string,
+	TAliasName extends string = TJoinName,
+> =
+	| ((
+		aliases: AppendToAliases<TAliases, TJoinedTable, TJoinName, TAliasName>,
+	) => AnyMySQL<TableName<TJoinedTableNames | TAliasName>>)
+	| AnyMySQL<TableName<TJoinedTableNames | TAliasName>>;
+
+export type JoinSelect<
+	TJoinedTable extends AnyMySqlTable,
+	TAliasName extends string,
+	TSelectedFields extends MySqlSelectFields<TableName>,
+> = ((table: BuildAliasTable<TJoinedTable, TableName<TAliasName>>) => TSelectedFields) | TSelectedFields;

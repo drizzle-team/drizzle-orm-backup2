@@ -1,6 +1,6 @@
 import { GetColumnData } from 'drizzle-orm';
 import { SQL } from 'drizzle-orm/sql';
-import { GetTableName, tableColumns, tableRowMapper } from 'drizzle-orm/utils';
+import { GetTableName, tableColumns, tableName, tableRowMapper } from 'drizzle-orm/utils';
 import { AnyMySqlColumn } from '~/columns/common';
 import { AnyMySqlDialect, MySqlQueryResult, MySqlSession } from '~/connection';
 import { MySqlSelectFields, MySqlSelectFieldsOrdered, SelectResultFields } from '~/operations';
@@ -54,7 +54,9 @@ export class MySqlUpdate<TTable extends AnyMySqlTable, TReturn = MySqlQueryResul
 	): Pick<MySqlUpdate<TTable, SelectResultFields<GetTableName<TTable>, TSelectedFields>[]>, 'getQuery' | 'execute'>;
 	public returning(fields?: MySqlSelectFields<GetTableName<TTable>>): MySqlUpdate<TTable, any> {
 		const orderedFields = this.dialect.orderSelectedFields<GetTableName<TTable>>(
-			fields ?? (this.config.table[tableColumns] as Record<string, AnyMySqlColumn<GetTableName<TTable>>>),
+			fields
+				?? (this.config.table[tableColumns] as Record<string, AnyMySqlColumn<GetTableName<TTable>>>),
+			this.table[tableName],
 		);
 		this.config.returning = orderedFields;
 		return this;

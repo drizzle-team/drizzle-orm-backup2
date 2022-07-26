@@ -40,7 +40,7 @@ export class MySqlDouble<
 	precision: number | undefined;
 	scale: number | undefined;
 
-	constructor(table: AnyTable<TTableName>, builder: MySqlDoubleBuilder<TNotNull, THasDefault>) {
+	constructor(table: AnyMySqlTable<TTableName>, builder: MySqlDoubleBuilder<TNotNull, THasDefault>) {
 		super(table, builder);
 		this.precision = builder.precision;
 		this.scale = builder.scale;

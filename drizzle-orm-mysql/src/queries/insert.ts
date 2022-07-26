@@ -1,20 +1,19 @@
 import { ColumnData } from 'drizzle-orm/branded-types';
 import { AnySQLResponse, Name, SQL, sql, SQLSourceParam } from 'drizzle-orm/sql';
-import { GetTableName, tableColumns, tableRowMapper } from 'drizzle-orm/utils';
+import { GetTableName, tableColumns, tableName, tableRowMapper } from 'drizzle-orm/utils';
 import { AnyMySqlColumn } from '~/columns/common';
 import { AnyMySqlDialect, MySqlQueryResult, MySqlSession } from '~/connection';
 import { Constraint } from '~/constraints';
-import { MySqlSelectFields, SelectResultFields } from '~/operations';
+import { MySqlSelectFields, MySqlSelectFieldsOrdered, SelectResultFields } from '~/operations';
 import { MySqlPreparedQuery } from '~/sql';
 import { AnyMySqlTable, GetTableConflictConstraints, InferModel } from '~/table';
 import { tableConflictConstraints } from '~/utils';
 import { MySqlUpdateSet } from './update';
-
 export interface MySqlInsertConfig<TTable extends AnyMySqlTable> {
 	table: TTable;
 	values: Record<string, ColumnData | SQL<GetTableName<TTable>>>[];
 	onConflict: SQL<GetTableName<TTable>> | undefined;
-	returning: { name: string; column: AnyMySqlColumn | AnySQLResponse }[] | undefined;
+	returning: MySqlSelectFieldsOrdered<GetTableName<TTable>> | undefined;
 }
 
 export type AnyMySqlInsertConfig = MySqlInsertConfig<any>;
@@ -42,16 +41,18 @@ export class MySqlInsert<TTable extends AnyMySqlTable, TReturn = MySqlQueryResul
 		fields: TSelectedFields,
 	): Pick<MySqlInsert<TTable, SelectResultFields<GetTableName<TTable>, TSelectedFields>[]>, 'getQuery' | 'execute'>;
 	public returning(fields?: MySqlSelectFields<GetTableName<TTable>>): MySqlInsert<TTable, any> {
-		const fieldsToMap: Record<string, AnyMySqlColumn | AnySQLResponse> = fields ?? this.config.table[tableColumns];
+		const fieldsToMap: Record<string, AnyMySqlColumn<GetTableName<TTable>> | AnySQLResponse<GetTableName<TTable>>> =
+			fields
+				?? this.config.table[tableColumns] as Record<string, AnyMySqlColumn<GetTableName<TTable>>>;
 
 		this.config.returning = Object.entries(fieldsToMap).map(
-			([name, column]) => ({ name, column }),
+			([name, column]) => ({ name, column, resultTableName: this.config.table[tableName] }),
 		);
 
 		return this;
 	}
 
-	onConflictDoNothing(
+	onDuplicateDoNothing(
 		target?:
 			| SQL<GetTableName<TTable>>
 			| ((
@@ -69,7 +70,7 @@ export class MySqlInsert<TTable extends AnyMySqlTable, TReturn = MySqlQueryResul
 		return this;
 	}
 
-	onConflictDoUpdate(
+	onDuplicateDoUpdate(
 		target:
 			| SQL<GetTableName<TTable>>
 			| ((constraints: GetTableConflictConstraints<TTable>) => Constraint<GetTableName<TTable>>),
