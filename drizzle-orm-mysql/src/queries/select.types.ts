@@ -24,21 +24,21 @@ export type SelectResult<
 > = TReturn extends undefined ? TInitialSelectResultFields[]
 	: Simplify<TReturn & { [k in Unwrap<GetTableName<TTable>>]: TInitialSelectResultFields }>[];
 
-export type AnyPgSelect = MySqlSelect<AnyMySqlTable, any, any, any, any>;
+export type AnyMySqlSelect = MySqlSelect<AnyMySqlTable, any, any, any, any>;
 
 export type QueryFinisherMethods = 'getQuery' | 'getSQL' | 'execute';
 
-export type PickJoin<TJoinReturn extends AnyPgSelect> = TJoinReturn;
-export type PickWhere<TJoinReturn extends AnyPgSelect> = Omit<
+export type PickJoin<TJoinReturn extends AnyMySqlSelect> = TJoinReturn;
+export type PickWhere<TJoinReturn extends AnyMySqlSelect> = Omit<
 	TJoinReturn,
 	'where' | `${JoinType}Join`
 >;
-export type PickOrderBy<TJoinReturn extends AnyPgSelect> = Pick<
+export type PickOrderBy<TJoinReturn extends AnyMySqlSelect> = Pick<
 	TJoinReturn,
 	'limit' | 'offset' | QueryFinisherMethods
 >;
-export type PickLimit<TJoinReturn extends AnyPgSelect> = Pick<TJoinReturn, 'offset' | QueryFinisherMethods>;
-export type PickOffset<TJoinReturn extends AnyPgSelect> = Pick<TJoinReturn, QueryFinisherMethods>;
+export type PickLimit<TJoinReturn extends AnyMySqlSelect> = Pick<TJoinReturn, 'offset' | QueryFinisherMethods>;
+export type PickOffset<TJoinReturn extends AnyMySqlSelect> = Pick<TJoinReturn, QueryFinisherMethods>;
 
 export type BuildAliasName<
 	TTable extends AnyMySqlTable,
