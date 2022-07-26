@@ -3,14 +3,15 @@ import { AnyMySqlTable } from '~/table';
 import { MySqlColumnBuilder, MySqlColumnWithMapper } from './common';
 
 export class MySqlTextBuilder<
+	TData extends string = string,
 	TNotNull extends ColumnNotNull = ColumnNotNull<false>,
 	THasDefault extends ColumnHasDefault = ColumnHasDefault<false>,
-> extends MySqlColumnBuilder<ColumnData<string>, ColumnDriverParam<string>, TNotNull, THasDefault> {
+> extends MySqlColumnBuilder<ColumnData<TData>, ColumnDriverParam<string>, TNotNull, THasDefault> {
 	/** @internal */
 	override build<TTableName extends TableName>(
 		table: AnyMySqlTable<TTableName>,
-	): MySqlText<TTableName, TNotNull, THasDefault> {
-		return new MySqlText<TTableName, TNotNull, THasDefault>(table, this);
+	): MySqlText<TTableName, TNotNull, THasDefault, TData> {
+		return new MySqlText<TTableName, TNotNull, THasDefault, TData>(table, this);
 	}
 }
 
@@ -18,9 +19,10 @@ export class MySqlText<
 	TTableName extends TableName,
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
+	TData extends string,
 > extends MySqlColumnWithMapper<
 	TTableName,
-	ColumnData<string>,
+	ColumnData<TData>,
 	ColumnDriverParam<string>,
 	TNotNull,
 	THasDefault
@@ -33,14 +35,15 @@ export class MySqlText<
 }
 
 export class MySqlTinyTextBuilder<
+	TData extends string = string,
 	TNotNull extends ColumnNotNull = ColumnNotNull<false>,
 	THasDefault extends ColumnHasDefault = ColumnHasDefault<false>,
-> extends MySqlColumnBuilder<ColumnData<string>, ColumnDriverParam<string>, TNotNull, THasDefault> {
+> extends MySqlColumnBuilder<ColumnData<TData>, ColumnDriverParam<string>, TNotNull, THasDefault> {
 	/** @internal */
 	override build<TTableName extends TableName>(
 		table: AnyMySqlTable<TTableName>,
-	): MySqlTinyText<TTableName, TNotNull, THasDefault> {
-		return new MySqlTinyText<TTableName, TNotNull, THasDefault>(table, this);
+	): MySqlTinyText<TTableName, TNotNull, THasDefault, TData> {
+		return new MySqlTinyText<TTableName, TNotNull, THasDefault, TData>(table, this);
 	}
 }
 
@@ -48,9 +51,10 @@ export class MySqlTinyText<
 	TTableName extends TableName,
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
+	TData extends string,
 > extends MySqlColumnWithMapper<
 	TTableName,
-	ColumnData<string>,
+	ColumnData<TData>,
 	ColumnDriverParam<string>,
 	TNotNull,
 	THasDefault
@@ -63,14 +67,15 @@ export class MySqlTinyText<
 }
 
 export class MySqlMediumTextBuilder<
+	TData extends string = string,
 	TNotNull extends ColumnNotNull = ColumnNotNull<false>,
 	THasDefault extends ColumnHasDefault = ColumnHasDefault<false>,
-> extends MySqlColumnBuilder<ColumnData<string>, ColumnDriverParam<string>, TNotNull, THasDefault> {
+> extends MySqlColumnBuilder<ColumnData<TData>, ColumnDriverParam<string>, TNotNull, THasDefault> {
 	/** @internal */
 	override build<TTableName extends TableName>(
 		table: AnyMySqlTable<TTableName>,
-	): MySqlMediumText<TTableName, TNotNull, THasDefault> {
-		return new MySqlMediumText<TTableName, TNotNull, THasDefault>(table, this);
+	): MySqlMediumText<TTableName, TNotNull, THasDefault, TData> {
+		return new MySqlMediumText<TTableName, TNotNull, THasDefault, TData>(table, this);
 	}
 }
 
@@ -78,9 +83,10 @@ export class MySqlMediumText<
 	TTableName extends TableName,
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
+	TData extends string,
 > extends MySqlColumnWithMapper<
 	TTableName,
-	ColumnData<string>,
+	ColumnData<TData>,
 	ColumnDriverParam<string>,
 	TNotNull,
 	THasDefault
@@ -93,14 +99,15 @@ export class MySqlMediumText<
 }
 
 export class MySqlLongTextBuilder<
+	TData extends string = string,
 	TNotNull extends ColumnNotNull = ColumnNotNull<false>,
 	THasDefault extends ColumnHasDefault = ColumnHasDefault<false>,
-> extends MySqlColumnBuilder<ColumnData<string>, ColumnDriverParam<string>, TNotNull, THasDefault> {
+> extends MySqlColumnBuilder<ColumnData<TData>, ColumnDriverParam<string>, TNotNull, THasDefault> {
 	/** @internal */
 	override build<TTableName extends TableName>(
 		table: AnyMySqlTable<TTableName>,
-	): MySqlLongText<TTableName, TNotNull, THasDefault> {
-		return new MySqlLongText<TTableName, TNotNull, THasDefault>(table, this);
+	): MySqlLongText<TTableName, TNotNull, THasDefault, TData> {
+		return new MySqlLongText<TTableName, TNotNull, THasDefault, TData>(table, this);
 	}
 }
 
@@ -108,9 +115,10 @@ export class MySqlLongText<
 	TTableName extends TableName,
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
+	TData extends string,
 > extends MySqlColumnWithMapper<
 	TTableName,
-	ColumnData<string>,
+	ColumnData<TData>,
 	ColumnDriverParam<string>,
 	TNotNull,
 	THasDefault
@@ -122,18 +130,18 @@ export class MySqlLongText<
 	}
 }
 
-export function text(name: string) {
-	return new MySqlTextBuilder(name);
+export function text<T extends string = string>(name: string) {
+	return new MySqlTextBuilder<T>(name);
 }
 
-export function tinytext(name: string) {
-	return new MySqlTinyTextBuilder(name);
+export function tinytext<T extends string = string>(name: string) {
+	return new MySqlTinyTextBuilder<T>(name);
 }
 
-export function mediumtext(name: string) {
-	return new MySqlMediumTextBuilder(name);
+export function mediumtext<T extends string = string>(name: string) {
+	return new MySqlMediumTextBuilder<T>(name);
 }
 
-export function longtext(name: string) {
-	return new MySqlLongTextBuilder(name);
+export function longtext<T extends string = string>(name: string) {
+	return new MySqlLongTextBuilder<T>(name);
 }

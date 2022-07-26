@@ -116,14 +116,14 @@ export type InferModel<
 
 export type AnyMySqlTable<TName extends TableName = TableName> = MySqlTable<TName, any>;
 
-export function pgTable<
+export function mySqlTable<
 	TTableName extends string,
 	TColumnsMap extends Record<string, AnyMySqlColumnBuilder>,
 >(
 	name: TTableName,
 	columns: TColumnsMap,
 ): MySqlTableWithColumns<TableName<TTableName>, BuildMySqlColumns<TableName<TTableName>, TColumnsMap>, {}>;
-export function pgTable<
+export function mySqlTable<
 	TTableName extends string,
 	TColumnsMap extends Record<string, AnyMySqlColumnBuilder>,
 	TExtraConfig extends MySqlTableExtraConfig<TableName<TTableName>, any>,
@@ -136,7 +136,7 @@ export function pgTable<
 	BuildMySqlColumns<TableName<TTableName>, TColumnsMap>,
 	BuildConflictConstraints<TExtraConfig>
 >;
-export function pgTable<
+export function mySqlTable<
 	TTableName extends string,
 	TColumnsMap extends Record<string, AnyMySqlColumnBuilder>,
 	TExtraConfig extends MySqlTableExtraConfig<TableName<TTableName>, any>,

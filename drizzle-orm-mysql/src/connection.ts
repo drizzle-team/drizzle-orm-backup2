@@ -140,11 +140,11 @@ export class MySqlDialect<TDBSchema extends Record<string, AnyMySqlTable>>
 	}
 
 	public escapeName(name: string): string {
-		return `"${name}"`;
+		return `\`${name}\``;
 	}
 
 	public escapeParam(num: number): string {
-		return `$${num}`;
+		return `?`;
 	}
 
 	public buildDeleteQuery<TTable extends AnyMySqlTable>({
