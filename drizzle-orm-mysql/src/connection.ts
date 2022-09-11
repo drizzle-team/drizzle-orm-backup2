@@ -31,8 +31,7 @@ export type MySqlColumnDriverDataType =
 
 export type MySqlClient = Pool | Connection;
 
-export interface MySqlSession
-	extends Session<MySqlColumnDriverDataType, Promise<MySqlQueryResult>> {
+export interface MySqlSession extends Session<MySqlColumnDriverDataType, Promise<MySqlQueryResult>> {
 	queryObjects(query: string, params: unknown[]): Promise<MySqlQueryResult>;
 }
 
@@ -40,12 +39,11 @@ export class MySqlSessionDefault implements MySqlSession {
 	constructor(private client: MySqlClient) {}
 
 	public async query(query: string, params: unknown[]): Promise<MySqlQueryResult> {
-		// console.log({ query, params });
 		const result = await this.client.query({
 			sql: query,
 			values: params,
 			rowsAsArray: true,
-			typeCast: function (field: any, next: any) {
+			typeCast: function(field: any, next: any) {
 				if (field.type === 'TIMESTAMP') {
 					return field.string();
 				}
@@ -108,8 +106,8 @@ export class MySqlDialect<TDBSchema extends Record<string, AnyMySqlTable>>
 		try {
 			for await (const migration of migrations) {
 				if (
-					!lastDbMigration ||
-					parseInt(lastDbMigration[2], 10)! < migration.folderMillis
+					!lastDbMigration
+					|| parseInt(lastDbMigration[2], 10)! < migration.folderMillis
 				) {
 					await session.query(migration.sql, []);
 					await session.query(
@@ -176,9 +174,9 @@ export class MySqlDialect<TDBSchema extends Record<string, AnyMySqlTable>>
 	}: MySqlDeleteConfig<TTable>): AnyMySQL<GetTableName<TTable>> {
 		const returningSql = returning
 			? sql.fromList([
-					sql` returning `,
-					...this.prepareTableFieldsForQuery(returning, { isSingleTable: true }),
-			  ])
+				sql` returning `,
+				...this.prepareTableFieldsForQuery(returning, { isSingleTable: true }),
+			])
 			: undefined;
 
 		const whereSql = where ? sql` where ${where}` : undefined;
@@ -229,16 +227,16 @@ export class MySqlDialect<TDBSchema extends Record<string, AnyMySqlTable>>
 		const setSql = this.buildUpdateSet<GetTableName<TTable>>(table, set);
 
 		const returningSql = returning
-			? sql<GetTableName<TTable>>` returning ${sql.fromList(
+			? sql<GetTableName<TTable>>` returning ${
+				sql.fromList(
 					this.prepareTableFieldsForQuery(returning, { isSingleTable: true }),
-			  )}`
+				)
+			}`
 			: undefined;
 
 		const whereSql = where ? sql` where ${where}` : undefined;
 
-		return sql<GetTableName<TTable>>`update ${
-			table as AnyMySqlTable<any>
-		} set ${setSql}${whereSql}${returningSql}`;
+		return sql<GetTableName<TTable>>`update ${table as AnyMySqlTable<any>} set ${setSql}${whereSql}${returningSql}`;
 	}
 
 	private prepareTableFieldsForQuery<TTableName extends TableName>(
@@ -307,14 +305,11 @@ export class MySqlDialect<TDBSchema extends Record<string, AnyMySqlTable>>
 				joinsArray.push(sql` `);
 			}
 			const joinMeta = joins[tableAlias]!;
-			const alias =
-				joinMeta.aliasTable[tableName] === joinMeta.table[tableName]
-					? undefined
-					: joinMeta.aliasTable;
+			const alias = joinMeta.aliasTable[tableName] === joinMeta.table[tableName]
+				? undefined
+				: joinMeta.aliasTable;
 			joinsArray.push(
-				sql`${sql.raw(joinMeta.joinType)} join ${joinMeta.table} ${alias} on ${
-					joinMeta.on
-				}` as AnyMySQL,
+				sql`${sql.raw(joinMeta.joinType)} join ${joinMeta.table} ${alias} on ${joinMeta.on}` as AnyMySQL,
 			);
 			if (index < joinKeys.length - 1) {
 				joinsArray.push(sql` `);
@@ -334,8 +329,7 @@ export class MySqlDialect<TDBSchema extends Record<string, AnyMySqlTable>>
 			}
 		});
 
-		const orderBySql =
-			orderByList.length > 0 ? sql` order by ${sql.fromList(orderByList)}` : undefined;
+		const orderBySql = orderByList.length > 0 ? sql` order by ${sql.fromList(orderByList)}` : undefined;
 
 		const limitSql = limit ? sql` limit ${limit}` : undefined;
 
@@ -374,9 +368,11 @@ export class MySqlDialect<TDBSchema extends Record<string, AnyMySqlTable>>
 		const valuesSql = sql.fromList(valuesSqlList);
 
 		const returningSql = returning
-			? sql` returning ${sql.fromList(
+			? sql` returning ${
+				sql.fromList(
 					this.prepareTableFieldsForQuery(returning, { isSingleTable: true }),
-			  )}`
+				)
+			}`
 			: undefined;
 
 		const onConflictSql = onConflict ? sql` on conflict ${onConflict}` : undefined;

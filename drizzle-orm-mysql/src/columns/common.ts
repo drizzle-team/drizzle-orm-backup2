@@ -72,21 +72,21 @@ export abstract class MySqlColumnBuilder<
 	): MySqlColumn<TTableName, TData, TDriverParam, TNotNull, THasDefault>;
 }
 
-export abstract class MySqlColumnBuilderWithAutoincrement<
+export abstract class MySqlColumnBuilderWithAutoIncrement<
 	TData extends ColumnData,
 	TDriverParam extends MySqlColumnDriverParam,
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
 > extends MySqlColumnBuilder<TData, TDriverParam, TNotNull, THasDefault> {
-	/** @internal */ _autoincrement = false;
+	/** @internal */ _autoIncrement = false;
 
-	autoincrement(): MySqlColumnBuilderWithAutoincrement<
+	autoIncrement(): MySqlColumnBuilderWithAutoIncrement<
 		TData,
 		TDriverParam,
 		TNotNull,
 		ColumnHasDefault<true>
 	> {
-		this._autoincrement = true;
+		this._autoIncrement = true;
 		return this as any;
 	}
 }
@@ -94,14 +94,14 @@ export abstract class MySqlColumnBuilderWithAutoincrement<
 export type AnyMySqlColumnBuilder = MySqlColumnBuilder<any, any, any, any>;
 
 export abstract class MySqlColumn<
-	TTableName extends TableName<string>,
+	TTableName extends TableName,
 	TDataType extends ColumnData,
 	TDriverData extends MySqlColumnDriverParam,
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
 > extends Column<TTableName, TDataType, TDriverData, TNotNull, THasDefault> {
 	override readonly table!: AnyMySqlTable<TTableName>;
-	readonly autoincrement!: boolean;
+	readonly autoIncrement!: boolean;
 
 	constructor(
 		table: AnyMySqlTable<TTableName>,
@@ -109,40 +109,28 @@ export abstract class MySqlColumn<
 	) {
 		super(table, builder);
 	}
+
+	unsafe(): AnyMySqlColumn {
+		return this;
+	}
 }
 
-export abstract class MySqlColumnWithMapper<
-	TTableName extends TableName,
-	TData extends ColumnData,
-	TDriverParam extends MySqlColumnDriverParam,
-	TNotNull extends ColumnNotNull,
-	THasDefault extends ColumnHasDefault,
-> extends MySqlColumn<TTableName, TData, TDriverParam, TNotNull, THasDefault> {
-	override mapFromDriverValue = (value: TDriverParam): TData => {
-		return value as unknown as TData;
-	};
-
-	override mapToDriverValue = (value: TData): TDriverParam => {
-		return value as unknown as TDriverParam;
-	};
-}
-
-export abstract class MySqlColumnWithAutoincrement<
+export abstract class MySqlColumnWithAutoIncrement<
 	TTableName extends TableName<string>,
 	TDataType extends ColumnData,
 	TDriverData extends MySqlColumnDriverParam,
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
-> extends MySqlColumnWithMapper<TTableName, TDataType, TDriverData, TNotNull, THasDefault> {
+> extends MySqlColumn<TTableName, TDataType, TDriverData, TNotNull, THasDefault> {
 	override readonly table!: AnyMySqlTable<TTableName>;
-	override readonly autoincrement: boolean;
+	override readonly autoIncrement: boolean;
 
 	constructor(
 		table: AnyMySqlTable<TTableName>,
-		builder: MySqlColumnBuilderWithAutoincrement<TDataType, TDriverData, TNotNull, THasDefault>,
+		builder: MySqlColumnBuilderWithAutoIncrement<TDataType, TDriverData, TNotNull, THasDefault>,
 	) {
 		super(table, builder);
-		this.autoincrement = builder._autoincrement;
+		this.autoIncrement = builder._autoIncrement;
 	}
 }
 
@@ -154,21 +142,13 @@ export type AnyMySqlColumn<
 	THasDefault extends ColumnHasDefault = any,
 > = MySqlColumn<TTableName, TData, TDriverParam, TNotNull, THasDefault>;
 
-export type AnyMySqlColumnWithMapper<
-	TTableName extends TableName = TableName,
-	TData extends ColumnData = any,
-	TDriverParam extends MySqlColumnDriverParam = MySqlColumnDriverParam,
-	TNotNull extends ColumnNotNull = ColumnNotNull,
-	THasDefault extends ColumnHasDefault = ColumnHasDefault,
-> = MySqlColumnWithMapper<TTableName, TData, TDriverParam, TNotNull, THasDefault>;
-
 export type BuildMySqlColumn<TTableName extends TableName, TBuilder extends AnyMySqlColumnBuilder> = TBuilder extends
 	MySqlColumnBuilder<
 		infer TData,
 		infer TDriverParam,
 		infer TNotNull,
 		infer THasDefault
-	> ? MySqlColumnWithMapper<TTableName, TData, TDriverParam, TNotNull, THasDefault>
+	> ? MySqlColumn<TTableName, TData, TDriverParam, TNotNull, THasDefault>
 	: never;
 
 export type BuildMySqlColumns<

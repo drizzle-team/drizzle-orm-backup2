@@ -10,9 +10,6 @@ export const tableForeignKeys = Symbol('tableForeignKeys');
 /** @internal */
 export const tableChecks = Symbol('tableChecks');
 
-/** @internal */
-export const tableConflictConstraints = Symbol('tableConflictConstraints');
-
 export function getTableColumns<TTable extends AnyMySqlTable>(table: TTable) {
 	const keys = Reflect.ownKeys(table[tableColumns]);
 	return keys.map((key) => table[tableColumns][key]!);
@@ -31,10 +28,4 @@ export function getTableForeignKeys<TTable extends AnyMySqlTable>(table: TTable)
 export function getTableChecks<TTable extends AnyMySqlTable>(table: TTable) {
 	const keys = Reflect.ownKeys(table[tableChecks]);
 	return keys.map((key) => table[tableChecks][key]!);
-}
-
-export function getTableConflictConstraints<TTable extends AnyMySqlTable>(
-	table: TTable,
-): GetTableConflictConstraints<TTable> {
-	return table[tableConflictConstraints];
 }

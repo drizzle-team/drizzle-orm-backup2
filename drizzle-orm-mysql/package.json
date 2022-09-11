@@ -5,10 +5,11 @@
 	"main": "index.js",
 	"types": "index.d.ts",
 	"scripts": {
-		"build": "tsc && resolve-tspaths",
+		"build": "concurrently -n build,test \"tsc -p tsconfig.build.json && resolve-tspaths\" pnpm:test",
+		"test": "cd tests && tsc",
 		"pack": "cp package.json dist/ && (cd dist && pnpm pack --pack-destination ..) && rm -f package.tgz && mv *.tgz package.tgz",
-		"publish": "npm publish package.tgz --git-checks false",
-		"publish:beta": "npm publish package.tgz --tag beta --git-checks false",
+		"publish": "pnpm publish package.tgz --git-checks false",
+		"publish:beta": "pnpm publish package.tgz --tag beta --git-checks false",
 		"build:int": "pnpm build && pnpm run pack"
 	},
 	"publishConfig": {

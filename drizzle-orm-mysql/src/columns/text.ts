@@ -1,6 +1,6 @@
 import { ColumnData, ColumnDriverParam, ColumnHasDefault, ColumnNotNull, TableName } from 'drizzle-orm/branded-types';
 import { AnyMySqlTable } from '~/table';
-import { MySqlColumnBuilder, MySqlColumnWithMapper } from './common';
+import { MySqlColumn, MySqlColumnBuilder } from './common';
 
 export class MySqlTextBuilder<
 	TData extends ColumnData<string> = ColumnData<string>,
@@ -20,7 +20,7 @@ export class MySqlText<
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
 	TData extends ColumnData<string>,
-> extends MySqlColumnWithMapper<
+> extends MySqlColumn<
 	TTableName,
 	TData,
 	ColumnDriverParam<string>,
@@ -52,7 +52,7 @@ export class MySqlTinyText<
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
 	TData extends ColumnData<string>,
-> extends MySqlColumnWithMapper<
+> extends MySqlColumn<
 	TTableName,
 	TData,
 	ColumnDriverParam<string>,
@@ -84,7 +84,7 @@ export class MySqlMediumText<
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
 	TData extends ColumnData<string>,
-> extends MySqlColumnWithMapper<
+> extends MySqlColumn<
 	TTableName,
 	TData,
 	ColumnDriverParam<string>,
@@ -116,7 +116,7 @@ export class MySqlLongText<
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
 	TData extends ColumnData<string>,
-> extends MySqlColumnWithMapper<
+> extends MySqlColumn<
 	TTableName,
 	TData,
 	ColumnDriverParam<string>,

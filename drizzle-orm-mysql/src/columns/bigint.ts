@@ -1,16 +1,16 @@
 import { ColumnData, ColumnDriverParam, ColumnHasDefault, ColumnNotNull, TableName } from 'drizzle-orm/branded-types';
 import { AnyMySqlTable } from '~/table';
 import {
+	MySqlColumn,
 	MySqlColumnBuilder,
-	MySqlColumnBuilderWithAutoincrement,
-	MySqlColumnWithAutoincrement,
-	MySqlColumnWithMapper,
+	MySqlColumnBuilderWithAutoIncrement,
+	MySqlColumnWithAutoIncrement,
 } from './common';
 
 export class MySqlBigInt53Builder<
 	TNotNull extends ColumnNotNull = ColumnNotNull<false>,
 	THasDefault extends ColumnHasDefault = ColumnHasDefault<false>,
-> extends MySqlColumnBuilderWithAutoincrement<
+> extends MySqlColumnBuilderWithAutoIncrement<
 	ColumnData<number>,
 	ColumnDriverParam<number | string>,
 	TNotNull,
@@ -28,7 +28,7 @@ export class MySqlBigInt53<
 	TTableName extends TableName,
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
-> extends MySqlColumnWithAutoincrement<
+> extends MySqlColumnWithAutoIncrement<
 	TTableName,
 	ColumnData<number>,
 	ColumnDriverParam<number | string>,
@@ -65,7 +65,7 @@ export class MySqlBigInt64<
 	TTableName extends TableName,
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
-> extends MySqlColumnWithMapper<TTableName, ColumnData<bigint>, ColumnDriverParam<string>, TNotNull, THasDefault> {
+> extends MySqlColumn<TTableName, ColumnData<bigint>, ColumnDriverParam<string>, TNotNull, THasDefault> {
 	brand!: 'MySqlBigInt64';
 
 	getSQLType(): string {

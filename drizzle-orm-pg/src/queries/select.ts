@@ -200,8 +200,12 @@ export class PgSelect<
 
 	public where(
 		where:
-			| ((aliases: TAliases) => AnyPgSQL<TableName<keyof TAliases & string> | GetTableName<TTable>>)
-			| AnyPgSQL<GetTableName<TTable>>
+			| ((
+				aliases: TAliases,
+			) => AnyPgSQL<
+				TableName<TJoinedDBTableNames> | TableName<keyof TAliases & string> | GetTableName<TTable> | TableName
+			>)
+			| AnyPgSQL<TableName<TJoinedDBTableNames> | GetTableName<TTable> | TableName>
 			| undefined,
 	): PickWhere<this> {
 		if (where instanceof SQL) {

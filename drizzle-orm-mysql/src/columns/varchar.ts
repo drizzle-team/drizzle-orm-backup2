@@ -1,7 +1,6 @@
-import { AnyTable } from 'drizzle-orm';
 import { ColumnData, ColumnDriverParam, ColumnHasDefault, ColumnNotNull, TableName } from 'drizzle-orm/branded-types';
 import { AnyMySqlTable } from '~/table';
-import { MySqlColumnBuilder, MySqlColumnWithMapper } from './common';
+import { MySqlColumn, MySqlColumnBuilder } from './common';
 
 export class MySqlVarCharBuilder<
 	TData extends ColumnData<string> = ColumnData<string>,
@@ -28,7 +27,7 @@ export class MySqlVarChar<
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
 	TData extends ColumnData<string>,
-> extends MySqlColumnWithMapper<
+> extends MySqlColumn<
 	TTableName,
 	TData,
 	ColumnDriverParam<string>,

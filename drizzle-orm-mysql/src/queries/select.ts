@@ -199,8 +199,12 @@ export class MySqlSelect<
 
 	public where(
 		where:
-			| ((aliases: TAliases) => AnyMySQL<TableName<keyof TAliases & string> | GetTableName<TTable>>)
-			| AnyMySQL<GetTableName<TTable>>
+			| ((
+				aliases: TAliases,
+			) => AnyMySQL<
+				TableName<TJoinedDBTableNames> | TableName<keyof TAliases & string> | GetTableName<TTable> | TableName
+			>)
+			| AnyMySQL<TableName<TJoinedDBTableNames> | GetTableName<TTable> | TableName>
 			| undefined,
 	): PickWhere<this> {
 		if (where instanceof SQL) {

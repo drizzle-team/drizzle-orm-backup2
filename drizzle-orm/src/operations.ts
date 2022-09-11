@@ -1,6 +1,6 @@
 import { ColumnData, ColumnDriverParam, TableName } from './branded-types';
 import { AnyColumn, Column } from './column';
-import { AnySQLResponse, SQLResponse } from './sql';
+import { AnySQL, AnySQLResponse, SQL, SQLResponse } from './sql';
 
 export type RequiredKeyOnly<TKey extends string, T extends AnyColumn> = T extends Column<
 	any,
@@ -22,6 +22,7 @@ export type SelectFields<
 	TColumnDriverParam extends ColumnDriverParam = ColumnDriverParam,
 > = {
 	[key: string]:
+		| SQL<TTableName>
 		| SQLResponse<TTableName, ColumnData>
 		| AnyColumn<TTableName, any, TColumnDriverParam>;
 };
@@ -29,5 +30,5 @@ export type SelectFields<
 export type SelectFieldsOrdered = {
 	name: string;
 	resultTableName: string;
-	column: AnyColumn | AnySQLResponse;
+	column: AnyColumn | AnySQL | AnySQLResponse;
 }[];

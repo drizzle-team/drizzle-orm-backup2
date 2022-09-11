@@ -1,6 +1,6 @@
 import { ColumnData, ColumnDriverParam, ColumnHasDefault, ColumnNotNull, TableName } from 'drizzle-orm/branded-types';
 import { AnyMySqlTable } from '~/table';
-import { MySqlColumnBuilder, MySqlColumnWithMapper } from './common';
+import { MySqlColumn, MySqlColumnBuilder } from './common';
 
 export class MySqlTinyIntBuilder<
 	TNotNull extends ColumnNotNull = ColumnNotNull<false>,
@@ -18,7 +18,7 @@ export class MySqlTinyInt<
 	TTableName extends TableName,
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
-> extends MySqlColumnWithMapper<
+> extends MySqlColumn<
 	TTableName,
 	ColumnData<number>,
 	ColumnDriverParam<number | string>,

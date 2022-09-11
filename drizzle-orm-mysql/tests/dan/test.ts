@@ -23,7 +23,7 @@ import {
 	notLike,
 	or,
 } from 'drizzle-orm/expressions';
-import { QueryResultRow } from 'pg';
+import { MySqlQueryResult } from '~/connection';
 
 import { Equal, Expect } from '../utils';
 import { db } from './db';
@@ -118,7 +118,7 @@ const rawQuery = await db.execute(
 	}`,
 );
 
-Expect<Equal<QueryResultRow, typeof rawQuery>>;
+Expect<Equal<MySqlQueryResult, typeof rawQuery>>;
 
 const megaJoin = await db.users
 	.select({ id: users.id, maxAge: sql`max(${users.age1})` })
@@ -131,8 +131,8 @@ const megaJoin = await db.users
 	.innerJoin({ currentCity: cities }, (aliases) => sql`${aliases.homeCity.id} = ${aliases.currentCity.id}`)
 	.innerJoin({ subscriber: users }, (aliases) => sql`${users.class} = ${aliases.subscriber.id}`)
 	.innerJoin({ closestCity: cities }, (aliases) => sql`${users.currentCity} = ${aliases.closestCity.id}`)
-	// .where(and(sql`${users.age1} > 0`, eq(cities.id, 1)))
 	.where(sql`true`)
+	// .where(and(sql`${users.age1} > 0`, eq(cities.id, 1)))
 	.execute();
 
 db.users

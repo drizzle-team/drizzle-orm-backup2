@@ -33,7 +33,6 @@ export class PgSessionDefault implements PgSession {
 	constructor(private client: PgClient) {}
 
 	public async query(query: string, params: unknown[]): Promise<QueryResult> {
-		console.log({ query, params });
 		const result = await this.client.query({
 			rowMode: 'array',
 			text: query,
@@ -320,12 +319,13 @@ export class PgDialect<TDBSchema extends Record<string, AnyPgTable>>
 
 		values.forEach((value) => {
 			const valueList: (SQLSourceParam<TableName> | AnyPgSQL)[] = [];
-			columnKeys.forEach((key) => {
-				const colValue = value[key];
+			columnKeys.forEach((colKey) => {
+				const colValue = value[colKey];
+				const column = columns[colKey]!;
 				if (typeof colValue === 'undefined') {
 					valueList.push(sql`default`);
 				} else {
-					valueList.push(colValue);
+					valueList.push(column.mapToDriverValue(colValue) as SQLSourceParam<TableName>);
 				}
 			});
 			joinedValues.push(valueList);

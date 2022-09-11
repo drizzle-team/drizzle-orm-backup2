@@ -1,6 +1,6 @@
 import { ColumnData, ColumnDriverParam, ColumnHasDefault, ColumnNotNull, TableName } from 'drizzle-orm/branded-types';
 import { AnyMySqlTable } from '~/table';
-import { MySqlColumnBuilder, MySqlColumnWithMapper } from './common';
+import { MySqlColumn, MySqlColumnBuilder } from './common';
 
 export class MySqlSerialBuilder extends MySqlColumnBuilder<
 	ColumnData<number>,
@@ -18,7 +18,7 @@ export class MySqlSerialBuilder extends MySqlColumnBuilder<
 
 export class MySqlSerial<
 	TTableName extends TableName,
-> extends MySqlColumnWithMapper<
+> extends MySqlColumn<
 	TTableName,
 	ColumnData<number>,
 	ColumnDriverParam<number | string>,

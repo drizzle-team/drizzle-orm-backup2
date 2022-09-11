@@ -1,14 +1,11 @@
 import { ColumnData } from 'drizzle-orm/branded-types';
-import { AnySQLResponse, Name, SQL, sql } from 'drizzle-orm/sql';
+import { AnySQLResponse, SQL } from 'drizzle-orm/sql';
 import { GetTableName, mapResultRow, tableColumns, tableName } from 'drizzle-orm/utils';
-import { Check } from '~/checks';
 import { AnyMySqlColumn } from '~/columns/common';
 import { AnyMySqlDialect, MySqlQueryResult, MySqlSession } from '~/connection';
 import { MySqlSelectFields, MySqlSelectFieldsOrdered, SelectResultFields } from '~/operations';
 import { MySqlPreparedQuery } from '~/sql';
-import { AnyMySqlTable, GetTableConflictConstraints, InferModel } from '~/table';
-import { tableConflictConstraints } from '~/utils';
-import { MySqlUpdateSet } from './update';
+import { AnyMySqlTable, InferModel } from '~/table';
 export interface MySqlInsertConfig<TTable extends AnyMySqlTable> {
 	table: TTable;
 	values: Record<string, ColumnData | SQL<GetTableName<TTable>>>[];
@@ -52,40 +49,40 @@ export class MySqlInsert<TTable extends AnyMySqlTable, TReturn = MySqlQueryResul
 		return this;
 	}
 
-	onDuplicateDoNothing(
-		target?:
-			| SQL<GetTableName<TTable>>
-			| ((
-				constraints: GetTableConflictConstraints<TTable>,
-			) => Check<GetTableName<TTable>>),
-	): Pick<this, 'returning' | 'getQuery' | 'execute'> {
-		if (typeof target === 'undefined') {
-			this.config.onConflict = sql`do nothing`;
-		} else if (target instanceof SQL) {
-			this.config.onConflict = sql`${target} do nothing`;
-		} else {
-			const targetSql = new Name(target(this.config.table[tableConflictConstraints]).name);
-			this.config.onConflict = sql`on constraint ${targetSql} do nothing`;
-		}
-		return this;
-	}
+	// onDuplicateDoNothing(
+	// 	target?:
+	// 		| SQL<GetTableName<TTable>>
+	// 		| ((
+	// 			constraints: GetTableConflictConstraints<TTable>,
+	// 		) => Check<GetTableName<TTable>>),
+	// ): Pick<this, 'returning' | 'getQuery' | 'execute'> {
+	// 	if (typeof target === 'undefined') {
+	// 		this.config.onConflict = sql`do nothing`;
+	// 	} else if (target instanceof SQL) {
+	// 		this.config.onConflict = sql`${target} do nothing`;
+	// 	} else {
+	// 		const targetSql = new Name(target(this.config.table[tableConflictConstraints]).name);
+	// 		this.config.onConflict = sql`on constraint ${targetSql} do nothing`;
+	// 	}
+	// 	return this;
+	// }
 
-	onDuplicateDoUpdate(
-		target:
-			| SQL<GetTableName<TTable>>
-			| ((constraints: GetTableConflictConstraints<TTable>) => Check<GetTableName<TTable>>),
-		set: MySqlUpdateSet<TTable>,
-	): Pick<this, 'returning' | 'getQuery' | 'execute'> {
-		const setSql = this.dialect.buildUpdateSet<GetTableName<TTable>>(this.config.table, set);
+	// onDuplicateDoUpdate(
+	// 	target:
+	// 		| SQL<GetTableName<TTable>>
+	// 		| ((constraints: GetTableConflictConstraints<TTable>) => Check<GetTableName<TTable>>),
+	// 	set: MySqlUpdateSet<TTable>,
+	// ): Pick<this, 'returning' | 'getQuery' | 'execute'> {
+	// 	const setSql = this.dialect.buildUpdateSet<GetTableName<TTable>>(this.config.table, set);
 
-		if (target instanceof SQL) {
-			this.config.onConflict = sql<GetTableName<TTable>>`${target} do update set ${setSql}`;
-		} else {
-			const targetSql = new Name(target(this.config.table[tableConflictConstraints]).name);
-			this.config.onConflict = sql`on constraint ${targetSql} do update set ${setSql}`;
-		}
-		return this;
-	}
+	// 	if (target instanceof SQL) {
+	// 		this.config.onConflict = sql<GetTableName<TTable>>`${target} do update set ${setSql}`;
+	// 	} else {
+	// 		const targetSql = new Name(target(this.config.table[tableConflictConstraints]).name);
+	// 		this.config.onConflict = sql`on constraint ${targetSql} do update set ${setSql}`;
+	// 	}
+	// 	return this;
+	// }
 
 	getQuery(): MySqlPreparedQuery {
 		const query = this.dialect.buildInsertQuery(this.config);
