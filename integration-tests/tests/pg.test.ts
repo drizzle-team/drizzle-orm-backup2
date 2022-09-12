@@ -1,6 +1,6 @@
 import anyTest, { TestFn } from 'ava';
 import Docker from 'dockerode';
-import { connect, sql } from 'drizzle-orm';
+import { connect, DefaultLogger, sql } from 'drizzle-orm';
 import { jsonb, PgConnector, PGDatabase, pgTable, serial, text } from 'drizzle-orm-pg';
 import getPort from 'get-port';
 import { Client } from 'pg';
@@ -71,7 +71,7 @@ test.before(async (t) => {
 		console.error('Cannot connect to Postgres');
 		throw lastError;
 	}
-	ctx.db = await connect(new PgConnector(ctx.client, schema));
+	ctx.db = await connect(new PgConnector(ctx.client, schema, { logger: new DefaultLogger() }));
 });
 
 test.beforeEach(async (t) => {

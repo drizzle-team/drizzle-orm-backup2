@@ -1,4 +1,15 @@
-import { Column, Connector, Dialect, Driver, MigrationMeta, Session, sql } from 'drizzle-orm';
+import {
+	Column,
+	Connector,
+	DefaultLogger,
+	Dialect,
+	Driver,
+	Logger,
+	MigrationMeta,
+	NoopLogger,
+	Session,
+	sql,
+} from 'drizzle-orm';
 import { ColumnData, TableName, Unwrap } from 'drizzle-orm/branded-types';
 import { AnySQL, Name, SQL, SQLResponse, SQLSourceParam } from 'drizzle-orm/sql';
 import { GetTableName, tableColumns, tableName } from 'drizzle-orm/utils';
@@ -29,10 +40,19 @@ export interface PgSession extends Session<PgColumnDriverDataType, Promise<Query
 	): Promise<QueryResult<T>>;
 }
 
-export class PgSessionDefault implements PgSession {
-	constructor(private client: PgClient) {}
+export interface PgDefaultSessionOptions {
+	logger?: Logger;
+}
+
+export class PgDefaultSession implements PgSession {
+	private logger: Logger;
+
+	constructor(private client: PgClient, options: PgDefaultSessionOptions = {}) {
+		this.logger = options.logger ?? new NoopLogger();
+	}
 
 	public async query(query: string, params: unknown[]): Promise<QueryResult> {
+		this.logger.logQuery(query, params);
 		const result = await this.client.query({
 			rowMode: 'array',
 			text: query,
@@ -49,13 +69,17 @@ export class PgSessionDefault implements PgSession {
 	}
 }
 
+export interface PgDriverOptions {
+	logger?: Logger;
+}
+
 export class PgDriver implements Driver<PgSession> {
-	constructor(private client: PgClient) {
+	constructor(private client: PgClient, private options: PgDriverOptions = {}) {
 		this.initMappers();
 	}
 
 	async connect(): Promise<PgSession> {
-		return new PgSessionDefault(this.client);
+		return new PgDefaultSession(this.client, { logger: this.options.logger });
 	}
 
 	public initMappers() {
@@ -369,14 +393,18 @@ export type PGDatabase<TSchema extends Record<string, AnyPgTable>> = Simplify<
 	{ deep: true }
 >;
 
+export interface PgConnectorOptions {
+	logger?: Logger;
+}
+
 export class PgConnector<TDBSchema extends Record<string, AnyPgTable>>
 	implements Connector<PgSession, PGDatabase<TDBSchema>>
 {
 	dialect: Dialect<PgSession, PGDatabase<TDBSchema>>;
 	driver: Driver<PgSession>;
 
-	constructor(client: PgClient, dbSchema: TDBSchema) {
+	constructor(client: PgClient, dbSchema: TDBSchema, options: PgConnectorOptions = {}) {
 		this.dialect = new PgDialect(dbSchema);
-		this.driver = new PgDriver(client);
+		this.driver = new PgDriver(client, { logger: options.logger });
 	}
 }
