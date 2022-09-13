@@ -20,6 +20,7 @@ Expect<
 			serialNotNull: number;
 			class: 'A' | 'C';
 			subClass: 'B' | 'D' | null;
+			varchar: string;
 			age1: number;
 			createdAt: Date;
 			updatedAt: Date;
