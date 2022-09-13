@@ -1,5 +1,5 @@
 import { tableColumns } from 'drizzle-orm/utils';
-import { AnyMySqlTable, GetTableConflictConstraints } from './table';
+import { AnyMySqlTable } from './table';
 
 /** @internal */
 export const tableIndexes = Symbol('tableIndexes');

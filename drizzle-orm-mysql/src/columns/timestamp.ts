@@ -44,9 +44,9 @@ export class MySqlTimestamp<
 		return `timestamp${precision}`;
 	}
 
-	override mapFromDriverValue = (value: ColumnDriverParam<string>): ColumnData<Date> => {
-		return new Date(value) as ColumnData<Date>;
-	};
+	override mapFromDriverValue(value: string): Date {
+		return new Date(value);
+	}
 }
 
 export class MySqlTimestampStringBuilder<

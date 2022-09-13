@@ -120,6 +120,12 @@ const rawQuery = await db.execute(
 
 Expect<Equal<QueryResultRow, typeof rawQuery>>;
 
+const textSelect = await db.users.select({
+	t: users.text,
+}).execute();
+
+Expect<Equal<{ t: string | null }[], typeof textSelect>>;
+
 const megaJoin = await db.users
 	.select({ id: users.id, maxAge: sql`max(${users.age1})` })
 	.innerJoin(cities, sql`${users.id} = ${cities.id}`, { id: cities.id })

@@ -54,6 +54,6 @@ export interface TimeConfig {
 	withTimezone?: boolean;
 }
 
-export function time(name: string, config?: TimeConfig) {
-	return new PgTimeBuilder(name, config?.withTimezone ?? false, config?.precision);
+export function time(name: string, config: TimeConfig = {}) {
+	return new PgTimeBuilder(name, config.withTimezone ?? false, config.precision);
 }

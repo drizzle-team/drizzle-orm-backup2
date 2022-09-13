@@ -57,6 +57,11 @@ export class MySqlDouble<
 	}
 }
 
-export function double(name: string, precision?: number, scale?: number) {
-	return new MySqlDoubleBuilder(name, precision, scale);
+export interface MySqlDoubleConfig {
+	precision?: number;
+	scale?: number;
+}
+
+export function double(name: string, config?: MySqlDoubleConfig): MySqlDoubleBuilder {
+	return new MySqlDoubleBuilder(name, config?.precision, config?.scale);
 }

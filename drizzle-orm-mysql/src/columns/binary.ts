@@ -46,6 +46,10 @@ export class MySqlBinary<
 	}
 }
 
-export function binary(name: string, length?: number) {
-	return new MySqlBinaryBuilder(name, length);
+export interface MySqlBinaryConfig {
+	length?: number;
+}
+
+export function binary(name: string, config: MySqlBinaryConfig = {}): MySqlBinaryBuilder {
+	return new MySqlBinaryBuilder(name, config.length);
 }

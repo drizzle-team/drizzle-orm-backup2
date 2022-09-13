@@ -33,8 +33,6 @@ export class PgText<
 	}
 }
 
-export function text(name: string): PgTextBuilder;
-export function text<T extends string = string>(name: string): PgTextBuilder<ColumnData<T>>;
-export function text(name: string) {
-	return new PgTextBuilder(name);
+export function text<T extends string = string>(name: string): PgTextBuilder<ColumnData<T>> {
+	return new PgTextBuilder<ColumnData<T>>(name);
 }

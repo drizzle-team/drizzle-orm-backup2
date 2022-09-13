@@ -48,8 +48,15 @@ export class MySqlVarChar<
 	}
 }
 
-export function varchar(name: string, length: number): MySqlVarCharBuilder;
-export function varchar<T extends string = string>(name: string, length: number): MySqlVarCharBuilder<ColumnData<T>>;
-export function varchar(name: string, length: number) {
-	return new MySqlVarCharBuilder(name, length);
+export interface MySqlVarcharOptions {
+	length: number;
+}
+
+export function varchar(name: string, options: MySqlVarcharOptions): MySqlVarCharBuilder;
+export function varchar<T extends string = string>(
+	name: string,
+	options: MySqlVarcharOptions,
+): MySqlVarCharBuilder<ColumnData<T>>;
+export function varchar(name: string, options: MySqlVarcharOptions) {
+	return new MySqlVarCharBuilder(name, options.length);
 }

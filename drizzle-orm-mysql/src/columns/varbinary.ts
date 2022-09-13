@@ -46,6 +46,10 @@ export class MySqlVarBinary<
 	}
 }
 
-export function varbinary(name: string, length?: number) {
-	return new MySqlVarBinaryBuilder(name, length);
+export interface MySqlVarbinaryOptions {
+	length: number;
+}
+
+export function varbinary(name: string, options: MySqlVarbinaryOptions) {
+	return new MySqlVarBinaryBuilder(name, options.length);
 }

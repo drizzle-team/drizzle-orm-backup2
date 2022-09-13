@@ -22,7 +22,7 @@ export type MySqlSelectFields<
 export type MySqlSelectFieldsOrdered<TTableName extends TableName = TableName> = (
 	& Omit<SelectFieldsOrdered[number], 'column'>
 	& {
-		column: AnyMySqlColumn<TTableName> | AnySQLResponse<TTableName>;
+		column: AnyMySqlColumn<TTableName> | AnyMySQL<TTableName | TableName> | AnySQLResponse<TTableName | TableName>;
 	}
 )[];
 

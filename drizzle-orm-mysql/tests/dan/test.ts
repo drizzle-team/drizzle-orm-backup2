@@ -47,7 +47,7 @@ const allOperators = await db.users.select({
 	col2: sql`5 - ${users.id} + 1`, // unknown
 	col3: sql`${users.id} + 1`.as<number>(), // number
 	col33: sql`${users.id} + 1`.as(users.id), // number
-	col34: sql`${users.id} + 1`.as(mapFunkyFuncResult), // number
+	col34: sql`${users.id} + 1`.as(mapFunkyFuncResult), // { foo: any }
 	col4: sql`one_or_another(${users.id}, ${users.class})`.as<string | number>(), // string | number
 	col5: sql`true`, // unknown
 	col6: sql`true`.as<boolean>(), // boolean
@@ -131,8 +131,7 @@ const megaJoin = await db.users
 	.innerJoin({ currentCity: cities }, (aliases) => sql`${aliases.homeCity.id} = ${aliases.currentCity.id}`)
 	.innerJoin({ subscriber: users }, (aliases) => sql`${users.class} = ${aliases.subscriber.id}`)
 	.innerJoin({ closestCity: cities }, (aliases) => sql`${users.currentCity} = ${aliases.closestCity.id}`)
-	.where(sql`true`)
-	// .where(and(sql`${users.age1} > 0`, eq(cities.id, 1)))
+	.where(and(sql`${users.age1} > 0`, eq(cities.id, 1)))
 	.execute();
 
 db.users

@@ -15,17 +15,17 @@ export abstract class MySqlDateColumnBaseBuilder<
 	hasOnUpdateNow: boolean = false;
 
 	override notNull(): MySqlDateColumnBaseBuilder<TData, TDriverParam, ColumnNotNull<true>, THasDefault> {
-		return super.notNull() as any;
+		return super.notNull() as ReturnType<this['notNull']>;
 	}
 
 	override default(
 		value: Unwrap<TData> | AnyMySQL,
 	): MySqlDateColumnBaseBuilder<TData, TDriverParam, TNotNull, ColumnHasDefault<true>> {
-		return super.default(value) as any;
+		return super.default(value) as ReturnType<this['default']>;
 	}
 
 	override primaryKey(): MySqlDateColumnBaseBuilder<TData, TDriverParam, ColumnNotNull<true>, THasDefault> {
-		return super.primaryKey() as any;
+		return super.primaryKey() as ReturnType<this['primaryKey']>;
 	}
 
 	defaultNow() {
@@ -34,7 +34,7 @@ export abstract class MySqlDateColumnBaseBuilder<
 
 	onUpdateNow(): MySqlDateColumnBaseBuilder<TData, TDriverParam, TNotNull, ColumnHasDefault<true>> {
 		this.hasOnUpdateNow = true;
-		return this as any;
+		return this as ReturnType<this['onUpdateNow']>;
 	}
 }
 

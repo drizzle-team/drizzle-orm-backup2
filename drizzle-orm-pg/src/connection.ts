@@ -208,10 +208,10 @@ export class PgDialect<TDBSchema extends Record<string, AnyPgTable>>
 		);
 	}
 
-	orderSelectedFields<TTableName extends TableName>(
-		fields: PgSelectFields<TTableName>,
+	orderSelectedFields(
+		fields: PgSelectFields<TableName>,
 		resultTableName: string,
-	): PgSelectFieldsOrdered<TTableName> {
+	): PgSelectFieldsOrdered {
 		return Object.entries(fields).map(([name, column]) => ({
 			name,
 			resultTableName,
@@ -240,15 +240,15 @@ export class PgDialect<TDBSchema extends Record<string, AnyPgTable>>
 		return sql`update ${table} set ${setSql}${whereSql}${returningSql}`;
 	}
 
-	private prepareTableFieldsForQuery<TTableName extends TableName>(
-		columns: PgSelectFieldsOrdered<TTableName>,
+	private prepareTableFieldsForQuery(
+		columns: PgSelectFieldsOrdered,
 		{ isSingleTable = false }: { isSingleTable?: boolean } = {},
-	): SQLSourceParam<TTableName>[] {
+	): SQLSourceParam<TableName>[] {
 		const columnsLen = columns.length;
 
 		return columns
 			.map(({ column }, i) => {
-				const chunk: SQLSourceParam<TTableName>[] = [];
+				const chunk: SQLSourceParam<TableName>[] = [];
 
 				if (column instanceof SQLResponse) {
 					if (isSingleTable) {
@@ -280,17 +280,15 @@ export class PgDialect<TDBSchema extends Record<string, AnyPgTable>>
 			.flat(1);
 	}
 
-	public buildSelectQuery<TTableName extends TableName>({
+	public buildSelectQuery({
 		fields,
 		where,
-		table: _table,
+		table,
 		joins,
 		orderBy,
 		limit,
 		offset,
-	}: PgSelectConfig): AnyPgSQL<TTableName> {
-		const table = _table as AnyPgTable<TTableName>;
-
+	}: PgSelectConfig): AnyPgSQL {
 		const joinKeys = Object.keys(joins);
 
 		const fieldsSql = sql.fromList(
@@ -305,9 +303,7 @@ export class PgDialect<TDBSchema extends Record<string, AnyPgTable>>
 			}
 			const joinMeta = joins[tableAlias]!;
 			const alias = joinMeta.aliasTable[tableName] === joinMeta.table[tableName] ? undefined : joinMeta.aliasTable;
-			joinsArray.push(
-				sql`${sql.raw(joinMeta.joinType)} join ${joinMeta.table} ${alias} on ${joinMeta.on}` as AnyPgSQL,
-			);
+			joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join ${joinMeta.table} ${alias} on ${joinMeta.on}`);
 			if (index < joinKeys.length - 1) {
 				joinsArray.push(sql` `);
 			}
@@ -332,7 +328,7 @@ export class PgDialect<TDBSchema extends Record<string, AnyPgTable>>
 
 		const offsetSql = offset ? sql` offset ${offset}` : undefined;
 
-		return sql<TTableName>`select ${fieldsSql} from ${table}${joinsSql}${whereSql}${orderBySql}${limitSql}${offsetSql}`;
+		return sql`select ${fieldsSql} from ${table}${joinsSql}${whereSql}${orderBySql}${limitSql}${offsetSql}`;
 	}
 
 	public buildInsertQuery({ table, values, onConflict, returning }: AnyPgInsertConfig): AnyPgSQL {

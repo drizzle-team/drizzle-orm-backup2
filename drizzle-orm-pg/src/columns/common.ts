@@ -1,7 +1,6 @@
 import { Column } from 'drizzle-orm';
 import { ColumnData, ColumnHasDefault, ColumnNotNull, TableName, Unwrap } from 'drizzle-orm/branded-types';
 import { ColumnBuilder } from 'drizzle-orm/column-builder';
-import { DriverValueMapper } from 'drizzle-orm/sql';
 import { Simplify } from 'type-fest';
 
 import { PgColumnDriverParam } from '~/branded-types';
@@ -30,17 +29,17 @@ export abstract class PgColumnBuilder<
 	}
 
 	override notNull(): PgColumnBuilder<TData, TDriverParam, ColumnNotNull<true>, THasDefault> {
-		return super.notNull() as any;
+		return super.notNull() as ReturnType<this['notNull']>;
 	}
 
 	override default(
 		value: Unwrap<TData> | AnyPgSQL,
 	): PgColumnBuilder<TData, TDriverParam, TNotNull, ColumnHasDefault<true>> {
-		return super.default(value) as any;
+		return super.default(value) as ReturnType<this['default']>;
 	}
 
 	override primaryKey(): PgColumnBuilder<TData, TDriverParam, ColumnNotNull<true>, THasDefault> {
-		return super.primaryKey() as any;
+		return super.primaryKey() as ReturnType<this['primaryKey']>;
 	}
 
 	references(
@@ -74,7 +73,7 @@ export abstract class PgColumnBuilder<
 	): PgColumn<TTableName, TData, TDriverParam, TNotNull, THasDefault>;
 }
 
-export type AnyPgColumnBuilder = PgColumnBuilder<any, any, any, any>;
+export type AnyPgColumnBuilder = PgColumnBuilder<ColumnData, PgColumnDriverParam, ColumnNotNull, ColumnHasDefault>;
 
 export abstract class PgColumn<
 	TTableName extends TableName<string>,

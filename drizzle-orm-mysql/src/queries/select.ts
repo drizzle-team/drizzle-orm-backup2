@@ -146,9 +146,9 @@ export class MySqlSelect<
 				Object.assign(self.aliases, { [aliasName]: tableAliasProxy });
 			}
 
-			const onExpression = on instanceof Function ? on(self.aliases as any) : on;
+			const onExpression = typeof on === 'function' ? on(self.aliases) : on;
 
-			const partialFields = select instanceof Function ? select(tableAliasProxy) : select;
+			const partialFields = typeof select === 'function' ? select(tableAliasProxy) : select;
 
 			self.fields.push(...self.dialect.orderSelectedFields(partialFields ?? tableAliasProxy[tableColumns], joinName));
 
@@ -251,7 +251,7 @@ export class MySqlSelect<
 		return this;
 	}
 
-	public getSQL(): AnyMySQL<GetTableName<TTable>> {
+	public getSQL(): AnyMySQL {
 		return this.dialect.buildSelectQuery(this.config);
 	}
 

@@ -1,25 +1,28 @@
 import { ColumnData, ColumnDriverParam, ColumnHasDefault, ColumnNotNull, TableName } from 'drizzle-orm/branded-types';
-import { DriverValueDecoder } from 'drizzle-orm/sql';
 import { AnyPgTable } from '../table';
 import { PgColumn, PgColumnBuilder } from './common';
 
-export class PgBigSerial53Builder<
-	TNotNull extends ColumnNotNull = ColumnNotNull<false>,
-	THasDefault extends ColumnHasDefault = ColumnHasDefault<false>,
-> extends PgColumnBuilder<ColumnData<number>, ColumnDriverParam<number>, TNotNull, THasDefault> {
+export class PgBigSerial53Builder extends PgColumnBuilder<
+	ColumnData<number>,
+	ColumnDriverParam<number>,
+	ColumnNotNull<true>,
+	ColumnHasDefault<true>
+> {
 	/** @internal */
 	override build<TTableName extends TableName>(
 		table: AnyPgTable<TTableName>,
-	): PgBigSerial53<TTableName, TNotNull, THasDefault> {
-		return new PgBigSerial53<TTableName, TNotNull, THasDefault>(table, this);
+	): PgBigSerial53<TTableName> {
+		return new PgBigSerial53<TTableName>(table, this);
 	}
 }
 
-export class PgBigSerial53<
-	TTableName extends TableName,
-	TNotNull extends ColumnNotNull,
-	THasDefault extends ColumnHasDefault,
-> extends PgColumn<TTableName, ColumnData<number>, ColumnDriverParam<number>, TNotNull, THasDefault> {
+export class PgBigSerial53<TTableName extends TableName> extends PgColumn<
+	TTableName,
+	ColumnData<number>,
+	ColumnDriverParam<number>,
+	ColumnNotNull<true>,
+	ColumnHasDefault<true>
+> {
 	protected brand!: 'PgBigSerial53';
 
 	getSQLType(): string {
@@ -34,23 +37,29 @@ export class PgBigSerial53<
 	}
 }
 
-export class PgBigSerial64Builder<
-	TNotNull extends ColumnNotNull = ColumnNotNull<false>,
-	THasDefault extends ColumnHasDefault = ColumnHasDefault<false>,
-> extends PgColumnBuilder<ColumnData<bigint>, ColumnDriverParam<string>, TNotNull, THasDefault> {
+export class PgBigSerial64Builder extends PgColumnBuilder<
+	ColumnData<bigint>,
+	ColumnDriverParam<string>,
+	ColumnNotNull<true>,
+	ColumnHasDefault<true>
+> {
 	/** @internal */
 	override build<TTableName extends TableName>(
 		table: AnyPgTable<TTableName>,
-	): PgBigSerial64<TTableName, TNotNull, THasDefault> {
-		return new PgBigSerial64<TTableName, TNotNull, THasDefault>(table, this);
+	): PgBigSerial64<TTableName> {
+		return new PgBigSerial64<TTableName>(table, this);
 	}
 }
 
 export class PgBigSerial64<
 	TTableName extends TableName,
-	TNotNull extends ColumnNotNull,
-	THasDefault extends ColumnHasDefault,
-> extends PgColumn<TTableName, ColumnData<bigint>, ColumnDriverParam<string>, TNotNull, THasDefault> {
+> extends PgColumn<
+	TTableName,
+	ColumnData<bigint>,
+	ColumnDriverParam<string>,
+	ColumnNotNull<true>,
+	ColumnHasDefault<true>
+> {
 	protected brand!: 'PgBigSerial64';
 
 	getSQLType(): string {
@@ -62,13 +71,13 @@ export class PgBigSerial64<
 	}
 }
 
-interface PgBigSerialConfig<T extends 'number' | 'bigint'> {
+interface PgBigSerialConfig<T extends 'number' | 'bigint' = 'number' | 'bigint'> {
 	mode: T;
 }
 
-export function bigserial(name: string, mode: PgBigSerialConfig<'number'>): PgBigSerial53Builder;
-export function bigserial(name: string, mode: PgBigSerialConfig<'bigint'>): PgBigSerial64Builder;
-export function bigserial(name: string, mode: any) {
+export function bigserial(name: string, config: PgBigSerialConfig<'number'>): PgBigSerial53Builder;
+export function bigserial(name: string, config: PgBigSerialConfig<'bigint'>): PgBigSerial64Builder;
+export function bigserial(name: string, { mode }: PgBigSerialConfig) {
 	if (mode === 'number') {
 		return new PgBigSerial53Builder(name);
 	}

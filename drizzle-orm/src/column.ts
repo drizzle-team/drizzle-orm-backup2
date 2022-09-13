@@ -47,8 +47,8 @@ export abstract class Column<
 
 export type AnyColumn<
 	TTableName extends TableName = TableName,
-	TData extends ColumnData = any,
-	TDriverParam extends ColumnDriverParam = any,
+	TData extends ColumnData = ColumnData,
+	TDriverParam extends ColumnDriverParam = ColumnDriverParam,
 	TNotNull extends ColumnNotNull = ColumnNotNull,
 	THasDefault extends ColumnHasDefault = ColumnHasDefault,
 > = Column<TTableName, TData, TDriverParam, TNotNull, THasDefault>;

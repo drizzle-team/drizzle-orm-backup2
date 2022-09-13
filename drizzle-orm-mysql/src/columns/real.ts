@@ -56,6 +56,11 @@ export class MySqlReal<
 	}
 }
 
-export function real(name: string, precision?: number, scale?: number) {
-	return new MySqlRealBuilder(name, precision, scale);
+export interface MySqlRealConfig {
+	precision?: number;
+	scale?: number;
+}
+
+export function real(name: string, config: MySqlRealConfig = {}): MySqlRealBuilder {
+	return new MySqlRealBuilder(name, config.precision, config.scale);
 }

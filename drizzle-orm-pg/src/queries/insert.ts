@@ -19,7 +19,7 @@ export interface PgInsertConfig<TTable extends AnyPgTable> {
 	table: TTable;
 	values: Record<string, ColumnData | SQL<GetTableName<TTable>>>[];
 	onConflict: SQL<GetTableName<TTable>> | undefined;
-	returning: PgSelectFieldsOrdered<GetTableName<TTable>> | undefined;
+	returning: PgSelectFieldsOrdered | undefined;
 }
 
 export type AnyPgInsertConfig = PgInsertConfig<AnyPgTable>;

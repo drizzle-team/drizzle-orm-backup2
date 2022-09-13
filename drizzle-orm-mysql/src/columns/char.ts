@@ -46,6 +46,10 @@ export class MySqlChar<
 	}
 }
 
-export function char(name: string, length?: number) {
-	return new MySqlCharBuilder(name, length);
+export interface MySqlCharConfig {
+	length?: number;
+}
+
+export function char(name: string, config: MySqlCharConfig = {}): MySqlCharBuilder {
+	return new MySqlCharBuilder(name, config.length);
 }

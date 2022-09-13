@@ -1,4 +1,4 @@
-import { ColumnData } from 'drizzle-orm/branded-types';
+import { ColumnData, ColumnDriverParam } from 'drizzle-orm/branded-types';
 import { AnySQLResponse, SQL } from 'drizzle-orm/sql';
 import { GetTableName, mapResultRow, tableColumns, tableName } from 'drizzle-orm/utils';
 import { AnyMySqlColumn } from '~/columns/common';
@@ -38,9 +38,8 @@ export class MySqlInsert<TTable extends AnyMySqlTable, TReturn = MySqlQueryResul
 		fields: TSelectedFields,
 	): Pick<MySqlInsert<TTable, SelectResultFields<TSelectedFields>[]>, 'getQuery' | 'execute'>;
 	public returning(fields?: MySqlSelectFields<GetTableName<TTable>>): MySqlInsert<TTable, any> {
-		const fieldsToMap: Record<string, AnyMySqlColumn<GetTableName<TTable>> | AnySQLResponse<GetTableName<TTable>>> =
-			fields
-				?? this.config.table[tableColumns] as Record<string, AnyMySqlColumn<GetTableName<TTable>>>;
+		const fieldsToMap: MySqlSelectFields<GetTableName<TTable>> = fields
+			?? this.config.table[tableColumns] as Record<string, AnyMySqlColumn<GetTableName<TTable>>>;
 
 		this.config.returning = Object.entries(fieldsToMap).map(
 			([name, column]) => ({ name, column, resultTableName: this.config.table[tableName] }),
@@ -96,7 +95,7 @@ export class MySqlInsert<TTable extends AnyMySqlTable, TReturn = MySqlQueryResul
 		// mapping from driver response to return type
 		const { returning } = this.config;
 		if (returning) {
-			return result[0].map((row: any) => mapResultRow(returning, row)) as TReturn;
+			return result[0].map((row: ColumnDriverParam[]) => mapResultRow(returning, row)) as TReturn;
 		} else {
 			return result as TReturn;
 		}

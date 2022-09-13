@@ -28,17 +28,17 @@ export abstract class MySqlColumnBuilder<
 	}
 
 	override notNull(): MySqlColumnBuilder<TData, TDriverParam, ColumnNotNull<true>, THasDefault> {
-		return super.notNull() as any;
+		return super.notNull() as ReturnType<this['notNull']>;
 	}
 
 	override default(
 		value: Unwrap<TData> | AnyMySQL,
 	): MySqlColumnBuilder<TData, TDriverParam, TNotNull, ColumnHasDefault<true>> {
-		return super.default(value) as any;
+		return super.default(value) as ReturnType<this['default']>;
 	}
 
 	override primaryKey(): MySqlColumnBuilder<TData, TDriverParam, ColumnNotNull<true>, THasDefault> {
-		return super.primaryKey() as any;
+		return super.primaryKey() as ReturnType<this['primaryKey']>;
 	}
 
 	references(
@@ -87,7 +87,7 @@ export abstract class MySqlColumnBuilderWithAutoIncrement<
 		ColumnHasDefault<true>
 	> {
 		this._autoIncrement = true;
-		return this as any;
+		return this as ReturnType<this['autoIncrement']>;
 	}
 }
 
@@ -100,11 +100,10 @@ export abstract class MySqlColumn<
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
 > extends Column<TTableName, TDataType, TDriverData, TNotNull, THasDefault> {
-	override readonly table!: AnyMySqlTable<TTableName>;
 	readonly autoIncrement!: boolean;
 
 	constructor(
-		table: AnyMySqlTable<TTableName>,
+		override readonly table: AnyMySqlTable<TTableName>,
 		builder: MySqlColumnBuilder<TDataType, TDriverData, TNotNull, THasDefault>,
 	) {
 		super(table, builder);
@@ -122,11 +121,10 @@ export abstract class MySqlColumnWithAutoIncrement<
 	TNotNull extends ColumnNotNull,
 	THasDefault extends ColumnHasDefault,
 > extends MySqlColumn<TTableName, TDataType, TDriverData, TNotNull, THasDefault> {
-	override readonly table!: AnyMySqlTable<TTableName>;
 	override readonly autoIncrement: boolean;
 
 	constructor(
-		table: AnyMySqlTable<TTableName>,
+		override readonly table: AnyMySqlTable<TTableName>,
 		builder: MySqlColumnBuilderWithAutoIncrement<TDataType, TDriverData, TNotNull, THasDefault>,
 	) {
 		super(table, builder);

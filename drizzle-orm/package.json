@@ -35,8 +35,8 @@
 	},
 	"homepage": "https://github.com/lambda-direct/drizzle-orm#readme",
 	"peerDependencies": {
-		"drizzle-orm-mysql": ">=0.12.0-beta.0",
-		"drizzle-orm-pg": ">=0.12.0-beta.0",
+		"drizzle-orm-mysql": ">=0.12.0 <0.13.0 || >=0.12.0-beta.0 <0.13.0-beta.0",
+		"drizzle-orm-pg": ">=0.12.0 <0.13.0 || >=0.12.0-beta.0 <0.13.0-beta.0",
 		"mysql2": ">=2 <3",
 		"pg": ">=8 <9",
 		"sqlite3": ">=5 <6"

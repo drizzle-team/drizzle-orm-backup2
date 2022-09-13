@@ -45,6 +45,13 @@ export class MySqlEnumColumn<
 	}
 }
 
-export function mysqlEnum<T extends string = string>(name: string, values: T[]) {
-	return new MySqlEnumBuilder<ColumnData<T>>(name, values);
+export interface MySqlEnumConfig<T extends string = string> {
+	values: T[];
+}
+
+export function mysqlEnum<T extends string = string>(
+	name: string,
+	config: MySqlEnumConfig<T>,
+): MySqlEnumBuilder<ColumnData<T>> {
+	return new MySqlEnumBuilder(name, config.values);
 }
